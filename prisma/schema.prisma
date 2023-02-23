@@ -1,0 +1,24 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model TimeEntry {
+    id          String   @id @default(uuid())
+    name        String
+    discription String
+    startTime   DateTime
+    endTime     DateTime
+}
+
+model User {
+    id        String @id @default(uuid())
+    email     String @unique
+    firstName String
+    lastName  String
+    passowrd  String
+}
