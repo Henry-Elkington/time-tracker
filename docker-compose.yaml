@@ -1,32 +1,9 @@
 version: "3.9"
 
 services:
-  nextjs:
-    platform: "linux/amd64"
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_CLIENTVAR: "clientvar"
-    working_dir: /app
+  client:
+    build: .
     ports:
       - "80:3000"
-    image: t3-app
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres?schema=public
-  postgres:
-    image: postgres:15
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
-
-# container_name: db
-# pgdata: {}
+      - DATABASE_URL=file:./db.sqlite
