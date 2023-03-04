@@ -3,9 +3,10 @@ import { z } from "zod";
 import { FormError, RouteDataArgs } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
-import { type VoidComponent } from "solid-js";
+import { createSignal, For, type VoidComponent } from "solid-js";
 import { FormInputs } from "~/frontend/FormInputs";
 import { getCreateSessionHeaders, getSession } from "~/backend/session";
+import { Button } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -24,7 +25,6 @@ export const routeData = () => {
 // Page Component
 const Login: VoidComponent = () => {
   const { user } = useRouteData<typeof routeData>();
-
   const [LoginAction, Login] = createServerAction$(loginFn);
 
   return (
@@ -43,6 +43,7 @@ const Login: VoidComponent = () => {
           />
         </Login.Form>
       </div>
+      <Button>fd</Button>
     </main>
   );
 };

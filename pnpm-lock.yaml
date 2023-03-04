@@ -16,7 +16,6 @@ specifiers:
   prettier: ^2.8.4
   prettier-plugin-tailwindcss: ^0.2.3
   prisma: ^4.11.0
-  solid-headless: ^0.13.1
   solid-heroicons: ^3.1.1
   solid-js: ^1.6.11
   solid-start: ^0.2.22
@@ -32,7 +31,6 @@ dependencies:
   '@solidjs/meta': 0.28.2_solid-js@1.6.11
   '@solidjs/router': 0.7.0_solid-js@1.6.11
   class-variance-authority: 0.4.0_typescript@4.9.5
-  solid-headless: 0.13.1_solid-js@1.6.11
   solid-heroicons: 3.1.1_solid-js@1.6.11
   solid-js: 1.6.11
   solid-start: 0.2.22_glxabd56qh7kqtjq7bhdxxj5jy
@@ -3872,16 +3870,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /solid-headless/0.13.1_solid-js@1.6.11:
-    resolution: {integrity: sha512-FZJai49YmdBu6oEo8aJGPMQ1Qn8xiW0cnD6vNFDIQWMKJdXEUtDEwz0hTR9aZ7Epq3IkrZs+98E0vNiv1+pZpA==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      solid-js: ^1.2
-    dependencies:
-      solid-js: 1.6.11
-      solid-use: 0.6.2_solid-js@1.6.11
-    dev: false
-
   /solid-heroicons/3.1.1_solid-js@1.6.11:
     resolution: {integrity: sha512-wfU/SqxqxWxInvfFlKJfCBPnJ94Zq1GQFiFL3M0KwZzT81lSF5yIC4HA/Czp3DYrn+dUumjO0qdrx8Ab3cy2sA==}
     peerDependencies:
@@ -3998,15 +3986,6 @@ packages:
       wait-on: 6.0.1_debug@4.3.4
     transitivePeerDependencies:
       - supports-color
-
-  /solid-use/0.6.2_solid-js@1.6.11:
-    resolution: {integrity: sha512-0ShJ5s+4PIN0pJB/BtsQucsZB+xnUeeTGaxErQDu6USn5jygZWXicAtOEvFbI8gv40xE751uY1Tz7Aib9lxL/Q==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      solid-js: ^1.5
-    dependencies:
-      solid-js: 1.6.11
-    dev: false
 
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
