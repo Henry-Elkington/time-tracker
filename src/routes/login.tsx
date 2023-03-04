@@ -6,7 +6,7 @@ import { useRouteData } from "solid-start";
 import { createSignal, For, type VoidComponent } from "solid-js";
 import { FormInputs } from "~/frontend/FormInputs";
 import { getCreateSessionHeaders, getSession } from "~/backend/session";
-import { Button } from "~/frontend/components";
+import { Button, Input } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -28,9 +28,8 @@ const Login: VoidComponent = () => {
   const [LoginAction, Login] = createServerAction$(loginFn);
 
   return (
-    <main class="container m-auto bg-white">
-      <h1 class="p-5 text-center text-4xl">Time Entrys</h1>
-      <div class="mx-auto flex max-w-2xl flex-col gap-4 px-4">
+    <main class="container static m-auto flex h-screen flex-col justify-center bg-white">
+      <div class="mx-auto flex max-w-2xl flex-col gap-4">
         <Login.Form>
           <FormInputs
             inputs={[
@@ -43,7 +42,6 @@ const Login: VoidComponent = () => {
           />
         </Login.Form>
       </div>
-      <Button>fd</Button>
     </main>
   );
 };
@@ -54,7 +52,7 @@ export default Login;
   ============================================ */
 
 async function loginFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 3000));
+  // await new Promise((res) => setTimeout(res, 3000));
 
   const fields = {
     email: formData.get("email"),

@@ -1,5 +1,5 @@
 import { db } from "~/backend/db";
-import { z } from "zod";
+import { ZodSchema, z } from "zod";
 import { FormError } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
@@ -115,39 +115,60 @@ export default TimeEntry;
 
 /* Actions
   ============================================ */
+type ty = <T>(formData: FormData, schema: z.Schema<T>) => Promise<T>;
+const validateFields: ty = async (formData, schema) => {
+  const fields = Object.fromEntries(formData);
+  const data = await schema.spa(fields);
+  if (!data.success) {
+    const fieldErrors = data.error.flatten((issue) => issue.message).fieldErrors;
+    throw new FormError("Fields invalid", { fieldErrors, fields });
+  }
+  return data.data;
+};
+
+const schema = z.object({
+  name: z.string().min(5),
+  discription: z.string(),
+  startTimeLocal: z.coerce.date(),
+  endTimeLocal: z.coerce.date(),
+});
+
+type t = z.infer<typeof schema>;
 
 async function createTimeEntryFn(formData: FormData) {
   await new Promise((res) => setTimeout(res, 3000));
 
-  const fields = {
-    name: formData.get("name"),
-    discription: formData.get("discription"),
-    startTimeLocal: formData.get("startTimeLocal"),
-    endTimeLocal: formData.get("endTimeLocal"),
-  };
+  // const fields = {
+  //   name: formData.get("name"),
+  //   discription: formData.get("discription"),
+  //   startTimeLocal: formData.get("startTimeLocal"),
+  //   endTimeLocal: formData.get("endTimeLocal"),
+  // };
 
-  const validatedFields = z
-    .object({
-      name: z.string().min(5),
-      discription: z.string(),
-      startTimeLocal: z.coerce.date(),
-      endTimeLocal: z.coerce.date(),
-    })
-    .safeParse(fields);
+  // const validatedFields = z
+  //   .object({
+  //     name: z.string().min(5),
+  //     discription: z.string(),
+  //     startTimeLocal: z.coerce.date(),
+  //     endTimeLocal: z.coerce.date(),
+  //   })
+  //   .safeParse(fields);
 
-  if (!validatedFields.success) {
-    const fieldErrors = validatedFields.error.flatten((issue) => issue.message).fieldErrors;
-    throw new FormError("Fields invalid", { fieldErrors, fields });
-  }
+  // if (!validatedFields.success) {
+  //   const fieldErrors = validatedFields.error.flatten((issue) => issue.message).fieldErrors;
+  //   throw new FormError("Fields invalid", { fieldErrors, fields });
+  // }
+
+  const data = await validateFields(formData, schema);
 
   const newTimeEntry = await db.timeEntry.create({
     data: {
-      name: validatedFields.data.name,
-      discription: validatedFields.data.discription,
-      startTimeLocal: fields.startTimeLocal as string,
-      endTimeLocal: fields.endTimeLocal as string,
-      startTime: validatedFields.data.startTimeLocal,
-      endTime: validatedFields.data.endTimeLocal,
+      name: data.name,
+      discription: data.discription,
+      startTimeLocal: formData.get("startTime") as string,
+      endTimeLocal: formData.get("endTime") as string,
+      startTime: data.startTimeLocal,
+      endTime: data.endTimeLocal,
     },
   });
 

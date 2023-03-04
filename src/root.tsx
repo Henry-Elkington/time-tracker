@@ -5,7 +5,7 @@ import { Body, ErrorBoundary, FileRoutes, Head, Html, Meta, Routes, Scripts, Tit
 
 export default function Root() {
   return (
-    <Html lang="en" class="bg-gray-100">
+    <Html lang="en" class="bg-white">
       {/* h-full box-border*/}
       <Head>
         <Title>Create JD App</Title>

@@ -1,12 +1,14 @@
+import { cx } from "class-variance-authority";
+
 // Text
-const textBase = /*tw=*/ "text-gray-800";
-const textHeading = /*tw=*/ "text-2xl" + textBase;
-const textBody = /*tw=*/ "text-base" + textBase;
+const textBase = cx("text-gray-600");
+const textMedium = cx("text-base", textBase);
+const textLarge = cx("text-2xl", textBase);
 
 const text = {
   base: textBase,
-  heading: textHeading,
-  body: textBody,
+  medium: textMedium,
+  large: textLarge,
 };
 
 export const atoms = {

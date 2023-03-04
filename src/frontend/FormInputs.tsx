@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import type { FormError } from "solid-start";
 import { For, Show } from "solid-js";
+import { Button, Input } from "./components";
 
 export const FormInputs: Component<{
   inputs: { label?: string; props: { name: string; value?: string; type: string; required?: boolean } }[];
@@ -15,13 +16,12 @@ export const FormInputs: Component<{
           <div class="flex flex-col">
             <label class="flex flex-col">
               {input?.label}
-              <input
+              <Input
                 type={input.props.type}
                 name={input.props.name}
                 required={input.props.required}
                 // placeholder="you@example.com"
                 value={input.props.value ?? ""}
-                class="block w-full border-gray-200  p-2 focus:border-blue-500 focus:ring-blue-500"
               />
             </label>
             <Show when={props.errors?.fieldErrors?.[input.props.name]}>
@@ -31,11 +31,11 @@ export const FormInputs: Component<{
         )}
       </For>
       <div class="mt-2 flex flex-col">
-        <button type="submit" disabled={props.pending} class="border bg-gray-100 p-2">
+        <Button type="submit" disabled={props.pending}>
           <Show when={props.pending} fallback={props.submitLable ? props.submitLable : "Submit"}>
             Loading...
           </Show>
-        </button>
+        </Button>
         <Show when={props.errors?.message}>
           <p class="text-red-500">{props.errors!.message}</p>
         </Show>
