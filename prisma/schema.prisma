@@ -8,14 +8,11 @@ datasource db {
 }
 
 model TimeEntry {
-    id          String @id @default(uuid())
+    id          String   @id @default(uuid())
     name        String
     discription String
-
-    startTimeLocal String
-    endTimeLocal   String
-    startTime      DateTime
-    endTime        DateTime
+    startTime   DateTime
+    endTime     DateTime
 }
 
 model User {
@@ -23,5 +20,5 @@ model User {
     email     String @unique
     firstName String
     lastName  String
-    passowrd  String
+    password  String
 }

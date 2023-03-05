@@ -1,15 +1,15 @@
 import { db } from "~/backend/db";
-import { ZodSchema, z } from "zod";
-import { FormError } from "solid-start";
+import { z } from "zod";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { useRouteData } from "solid-start";
+import { RouteDataArgs, useRouteData } from "solid-start";
 import { For, type VoidComponent } from "solid-js";
 import { FormInputs } from "~/frontend/FormInputs";
+import { validateFields } from "~/backend/utils";
 
 /* Data Fetching
   ============================================ */
 
-export const routeData = () => {
+export const routeData = ({}: RouteDataArgs) => {
   const timeEntrys = createServerData$(
     () => {
       return db.timeEntry.findMany({
@@ -33,7 +33,6 @@ export const routeData = () => {
 // Page Component
 const TimeEntry: VoidComponent = () => {
   const { timeEntrys } = useRouteData<typeof routeData>();
-
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
@@ -115,53 +114,21 @@ export default TimeEntry;
 
 /* Actions
   ============================================ */
-type ty = <T>(formData: FormData, schema: z.Schema<T>) => Promise<T>;
-const validateFields: ty = async (formData, schema) => {
-  const fields = Object.fromEntries(formData);
-  const data = await schema.spa(fields);
-  if (!data.success) {
-    const fieldErrors = data.error.flatten((issue) => issue.message).fieldErrors;
-    throw new FormError("Fields invalid", { fieldErrors, fields });
-  }
-  return data.data;
-};
-
-const schema = z.object({
-  name: z.string().min(5),
-  discription: z.string(),
-  startTimeLocal: z.coerce.date(),
-  endTimeLocal: z.coerce.date(),
-});
-
-type t = z.infer<typeof schema>;
 
 async function createTimeEntryFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 3000));
+  await new Promise((res) => setTimeout(res, 2000));
 
-  // const fields = {
-  //   name: formData.get("name"),
-  //   discription: formData.get("discription"),
-  //   startTimeLocal: formData.get("startTimeLocal"),
-  //   endTimeLocal: formData.get("endTimeLocal"),
-  // };
+  const data = await validateFields(
+    formData,
+    z.object({
+      name: z.string().min(5),
+      discription: z.string(),
+      startTimeLocal: z.coerce.date(),
+      endTimeLocal: z.coerce.date(),
+    })
+  );
 
-  // const validatedFields = z
-  //   .object({
-  //     name: z.string().min(5),
-  //     discription: z.string(),
-  //     startTimeLocal: z.coerce.date(),
-  //     endTimeLocal: z.coerce.date(),
-  //   })
-  //   .safeParse(fields);
-
-  // if (!validatedFields.success) {
-  //   const fieldErrors = validatedFields.error.flatten((issue) => issue.message).fieldErrors;
-  //   throw new FormError("Fields invalid", { fieldErrors, fields });
-  // }
-
-  const data = await validateFields(formData, schema);
-
-  const newTimeEntry = await db.timeEntry.create({
+  await db.timeEntry.create({
     data: {
       name: data.name,
       discription: data.discription,
@@ -175,68 +142,48 @@ async function createTimeEntryFn(formData: FormData) {
   return redirect("/");
 }
 async function updateTimeEntryFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 3000));
+  await new Promise((res) => setTimeout(res, 2000));
 
-  const fields = {
-    id: formData.get("id"),
-    name: formData.get("name"),
-    discription: formData.get("discription"),
-    startTimeLocal: formData.get("startTimeLocal"),
-    endTimeLocal: formData.get("endTimeLocal"),
-  };
-
-  const validatedFields = z
-    .object({
+  const data = await validateFields(
+    formData,
+    z.object({
       id: z.string(),
       name: z.string().min(5),
       discription: z.string(),
       startTimeLocal: z.coerce.date(),
       endTimeLocal: z.coerce.date(),
     })
-    .safeParse(fields);
-
-  if (!validatedFields.success) {
-    const fieldErrors = validatedFields.error.flatten((issue) => issue.message).fieldErrors;
-    throw new FormError("Fields invalid", { fieldErrors, fields });
-  }
+  );
 
   const updatedTimeEntry = await db.timeEntry.update({
     where: {
-      id: validatedFields.data.id,
+      id: data.id,
     },
     data: {
-      name: validatedFields.data.name,
-      discription: validatedFields.data.discription,
-      startTimeLocal: fields.startTimeLocal as string,
-      endTimeLocal: fields.endTimeLocal as string,
-      startTime: validatedFields.data.startTimeLocal,
-      endTime: validatedFields.data.endTimeLocal,
+      name: data.name,
+      discription: data.discription,
+      startTimeLocal: formData.get("startTimeLocal") as string,
+      endTimeLocal: formData.get("endTimeLocal") as string,
+      startTime: data.startTimeLocal,
+      endTime: data.endTimeLocal,
     },
   });
 
   return redirect("/");
 }
 async function deleteTimeEntryFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 3000));
+  await new Promise((res) => setTimeout(res, 2000));
 
-  const fields = {
-    id: formData.get("id"),
-  };
-
-  const validatedFields = z
-    .object({
+  const data = await validateFields(
+    formData,
+    z.object({
       id: z.string(),
     })
-    .safeParse(fields);
-
-  if (!validatedFields.success) {
-    const fieldErrors = validatedFields.error.flatten((issue) => issue.message).fieldErrors;
-    throw new FormError("Fields invalid", { fieldErrors, fields });
-  }
+  );
 
   const deletedTimeEntry = await db.timeEntry.delete({
     where: {
-      id: validatedFields.data.id,
+      id: data.id,
     },
   });
 

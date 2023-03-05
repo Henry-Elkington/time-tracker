@@ -1,85 +1,40 @@
 import { redirect } from "solid-start/server";
 import { createCookieSessionStorage } from "solid-start/session";
-
-// const sessionSecret = import.meta.env.SESSION_SECRET;
-const storage = createCookieSessionStorage({
-  cookie: {
-    name: "session",
-    // secure doesn't work on localhost for Safari
-    // https://web.dev/when-to-use-local-https/
-    secure: false, // secure: process.env.NODE_ENV === "production",
-    secrets: ["hello"], // secrets: [process.env.SESSION_SECRET],
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-    httpOnly: true,
-  },
-});
-export function getSessionCookie(request: Request) {
-  return storage.getSession(request.headers.get("Cookie"));
-}
-
-export async function getCreateSessionHeaders(userId: string) {
-  const session = await storage.getSession();
-  session.set("userId", userId);
-  return {
-    "Set-Cookie": await storage.commitSession(session),
-  };
-}
-export async function getDeleteSessionHeaders() {
-  const session = await storage.getSession();
-  // const session = await getSession(request);
-  return {
-    "Set-Cookie": await storage.destroySession(session),
-  };
-}
-
-export async function getSession(request: Request, redirectInfo?: { whenEmpty: boolean; url: string }) {
-  const session = await getSessionCookie(request);
-  const userId: string | undefined = session.get("userId");
-
-  if (!redirectInfo) return userId;
-
-  if (typeof userId === "string" && userId.length > 0) {
-    if (!redirectInfo.whenEmpty) {
-      throw redirect(redirectInfo.url);
-    } else {
-      return userId;
-    }
-  } else {
-    if (!redirectInfo.whenEmpty) {
-      return redirect(redirectInfo.url);
-    } else {
-      return userId;
-    }
-  }
-}
-
-/*
-
-import { redirect } from "solid-start/server";
-import { createCookieSessionStorage } from "solid-start/session";
 import { db } from "~/backend/db";
-type LoginForm = {
-  username: string;
+
+type SignupForm = {
+  email: string;
+  firstName: string;
+  lastName: string;
   password: string;
 };
 
-export async function register({ username, password }: LoginForm) {
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
+export async function register({ email, firstName, lastName, password }: SignupForm) {
   return db.user.create({
-    data: { username: username, password },
+    data: {
+      email,
+      firstName,
+      lastName,
+      password,
+    },
   });
 }
 
-export async function login({ username, password }: LoginForm) {
-  const user = await db.user.findUnique({ where: { username } });
+export async function login({ email, password }: LoginForm) {
+  const user = await db.user.findUnique({ where: { email } });
   if (!user) return null;
   const isCorrectPassword = password === user.password;
   if (!isCorrectPassword) return null;
   return user;
 }
 
-const sessionSecret = import.meta.env.SESSION_SECRET;
+// const sessionSecret = import.meta.env.SESSION_SECRET;
+const sessionSecret = process.env.SESSION_SECRET;
 
 const storage = createCookieSessionStorage({
   cookie: {
@@ -123,7 +78,7 @@ export async function getUser(request: Request) {
   }
 
   try {
-    const user = await db.user.findUnique({ where: { id: Number(userId) } });
+    const user = await db.user.findUnique({ where: { id: String(userId) } });
     return user;
   } catch {
     throw logout(request);
@@ -149,4 +104,59 @@ export async function createUserSession(userId: string, redirectTo: string) {
   });
 }
 
-*/
+// import { redirect } from "solid-start/server";
+// import { createCookieSessionStorage } from "solid-start/session";
+
+// // const sessionSecret = import.meta.env.SESSION_SECRET;
+// const storage = createCookieSessionStorage({
+//   cookie: {
+//     name: "session",
+//     // secure doesn't work on localhost for Safari
+//     // https://web.dev/when-to-use-local-https/
+//     secure: false, // secure: process.env.NODE_ENV === "production",
+//     secrets: ["hello"], // secrets: [process.env.SESSION_SECRET],
+//     sameSite: "lax",
+//     path: "/",
+//     maxAge: 60 * 60 * 24 * 30, // 30 days
+//     httpOnly: true,
+//   },
+// });
+// export function getSessionCookie(request: Request) {
+//   return storage.getSession(request.headers.get("Cookie"));
+// }
+
+// export async function getCreateSessionHeaders(userId: string) {
+//   const session = await storage.getSession();
+//   session.set("userId", userId);
+//   return {
+//     "Set-Cookie": await storage.commitSession(session),
+//   };
+// }
+// export async function getDeleteSessionHeaders() {
+//   const session = await storage.getSession();
+//   // const session = await getSession(request);
+//   return {
+//     "Set-Cookie": await storage.destroySession(session),
+//   };
+// }
+
+// export async function getSession(request: Request, redirectInfo?: { whenEmpty: boolean; url: string }) {
+//   const session = await getSessionCookie(request);
+//   const userId: string | undefined = session.get("userId");
+
+//   if (!redirectInfo) return userId;
+
+//   if (typeof userId === "string" && userId.length > 0) {
+//     if (redirectInfo.whenEmpty) {
+//       throw redirect(redirectInfo.url);
+//     } else {
+//       return userId;
+//     }
+//   } else {
+//     if (redirectInfo.whenEmpty) {
+//       throw redirect(redirectInfo.url);
+//     } else {
+//       return userId;
+//     }
+//   }
+// }

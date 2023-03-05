@@ -8,6 +8,7 @@ import { For } from "solid-js";
   ============================================ */
 
 // Styles
+// class="rounded-sm border border-gray-300 bg-white px-2 transition-all hover:border-gray-400"
 export const buttonStyles = cva([
   "bg-gray-100 border border-gray-300 rounded-sm py-0.5 px-2", //active:bg-gray-100
   "hover:border-gray-400",
