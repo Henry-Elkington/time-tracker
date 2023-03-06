@@ -1,13 +1,13 @@
 import { db } from "~/backend/db";
 import { z } from "zod";
-import { A, FormError, useSearchParams } from "solid-start";
+import { A, FormError, RouteDataArgs, useParams, useSearchParams } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
-import { type VoidComponent } from "solid-js";
-import { FormInputs } from "~/frontend/FormInputs";
-import { createUserSession, getUser, register } from "~/backend/session";
+import { createSignal, For, type VoidComponent } from "solid-js";
+import { CreateFields } from "~/frontend/CreateFields";
+import { createUserSession, getUser, login } from "~/backend/session";
+import { Button, Card, Input } from "~/frontend/elements";
 import { validateFields } from "~/backend/utils";
-import { Card, Input } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -25,39 +25,37 @@ export const routeData = () => {
   ============================================ */
 
 // Page Component
-const Signup: VoidComponent = () => {
+const Login: VoidComponent = () => {
   const data = useRouteData<typeof routeData>();
   const use = data();
   const [searchParams] = useSearchParams();
-  const [SignupAction, Signup] = createServerAction$(signupFn);
+  const [LoginAction, Login] = createServerAction$(loginFn);
 
   return (
     <main class="flex h-screen flex-col items-center justify-center">
       <Card class="flex w-96 flex-col gap-4">
-        <Signup.Form class="flex flex-col gap-3">
-          <h1 class="text-center font-semibold">Signup</h1>
-          <FormInputs
+        <Login.Form class="flex flex-col gap-3">
+          <h1 class="text-center font-semibold">Login</h1>
+          <CreateFields
             hiddenInputs={[{ name: "redirectTo", value: searchParams.redirect ?? "/" }]}
             inputs={[
-              { label: "Email", props: { name: "email", type: "email", required: true } },
-              { label: "First Name", props: { name: "firstName", type: "text", required: true } },
-              { label: "Last Name", props: { name: "lastName", type: "text", required: true } },
-              { label: "Password", props: { name: "password", type: "password", required: true } },
+              { label: "Email", props: { name: "email", type: "email" } },
+              { label: "Password", props: { name: "password", type: "password" } },
             ]}
-            submitLable="Login"
-            errors={SignupAction.error}
-            pending={SignupAction.pending}
+            submitLable="Signup"
+            errors={LoginAction.error}
+            pending={LoginAction.pending}
           />
-        </Signup.Form>
+        </Login.Form>
         <div class="flex items-center justify-between">
           <label class="flex w-fit text-sm">
             <Input type="checkbox" class="h-5 w-5 scale-75" />
             Remember Me
           </label>
           <p class="text-right text-xs text-neutral-400">
-            Already Have An Account?{" "}
-            <A href="/login" class="text-blue-700 hover:underline">
-              Login
+            Dont Have An Account?{" "}
+            <A href="/signup" class="text-blue-700 hover:underline">
+              Signup
             </A>
           </p>
         </div>
@@ -66,12 +64,12 @@ const Signup: VoidComponent = () => {
   );
 };
 
-export default Signup;
+export default Login;
 
 /* Actions
   ============================================ */
 
-async function signupFn(formData: FormData) {
+async function loginFn(formData: FormData) {
   await new Promise((res) => setTimeout(res, 2000));
 
   const data = await validateFields(
@@ -79,20 +77,15 @@ async function signupFn(formData: FormData) {
     z.object({
       redirectTo: z.string(),
       email: z.string().email(),
-      firstName: z.string(),
-      lastName: z.string(),
       password: z.string(),
     })
   );
 
-  const fields = Object.fromEntries(formData);
-  const userExists = await db.user.findUnique({ where: { email: data.email } });
-  if (userExists) {
-    throw new FormError(`User with email ${data.email} already exists`, { fields });
-  }
-  const user = await register(data);
+  console.log(data);
+
+  const user = await login(data);
   if (!user) {
-    throw new FormError(`Something went wrong trying to create a new user.`, { fields });
+    throw new FormError(`Email/Password combination is incorrect`); //, {fields,});
   }
 
   return createUserSession(`${user.id}`, data.redirectTo ?? "/");

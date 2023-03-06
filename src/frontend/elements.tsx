@@ -12,17 +12,47 @@ export const Card: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
 /* Input
   ============================================ */
 
-export const Input: Component<JSX.InputHTMLAttributes<HTMLInputElement> & { inputInvalid?: boolean }> = (props) => {
-  const [styleProps, elementProps] = splitProps(props, ["class"]);
+export const Input: Component<JSX.InputHTMLAttributes<HTMLInputElement> & { invalid?: boolean }> = (props) => {
+  const [styleProps, customProps, elementProps] = splitProps(props, ["class"], ["invalid"]);
   // border-red-300 text-red-600 focus:ring-red-400 focus-visible:border-red-400
   return (
     <input
       class={twMerge(
-        "rounded-sm border border-neutral-300 bg-white py-0.5 px-2 outline-none focus:ring-1 focus:ring-blue-400 focus:ring-offset-1 focus-visible:border-neutral-400 disabled:bg-neutral-100 disabled:text-neutral-400",
+        "m-0 rounded-sm border border-neutral-300 bg-white py-0.5 px-2 outline-none focus:ring-1 focus:ring-blue-400 focus:ring-offset-1 focus-visible:border-neutral-400 disabled:bg-neutral-100 disabled:text-neutral-400",
+        customProps.invalid ? "border-red-300 text-red-600 focus:ring-red-400 focus-visible:border-red-400" : "",
         styleProps.class
       )}
       {...elementProps}
     />
+  );
+};
+
+/* Label
+  ============================================ */
+
+export const Label: Component<JSX.LabelHTMLAttributes<HTMLLabelElement> & { invalid?: boolean }> = (props) => {
+  const [styleProps, customProps, elementProps] = splitProps(props, ["class"], ["invalid"]);
+  return (
+    // text-sm text-red-600
+    <label
+      class={twMerge(
+        "block text-sm font-medium text-neutral-700",
+        customProps.invalid ? "after:ml-0.5 after:text-red-500 after:content-['*']" : "",
+        styleProps.class
+      )}
+      {...elementProps}
+    />
+  );
+};
+
+/* Error Label
+  ============================================ */
+
+export const ErrorLabel: Component<JSX.HTMLAttributes<HTMLParagraphElement>> = (props) => {
+  const [styleProps, elementProps] = splitProps(props, ["class"]);
+  return (
+    // text-sm text-red-600
+    <p class={twMerge("block text-sm font-medium text-red-500")} {...elementProps} />
   );
 };
 
@@ -40,16 +70,5 @@ export const Button: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (p
       )}
       {...elementProps}
     />
-  );
-};
-
-/* Label
-  ============================================ */
-
-export const Label: Component<JSX.LabelHTMLAttributes<HTMLLabelElement>> = (props) => {
-  const [styleProps, elementProps] = splitProps(props, ["class"]);
-  return (
-    // after:ml-0.5 after:text-red-500 after:content-['*']    text-sm text-red-600
-    <label class={twMerge("block text-sm font-medium text-neutral-700", styleProps.class)} {...elementProps} />
   );
 };

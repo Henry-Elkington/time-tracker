@@ -2,11 +2,11 @@ import type { Component } from "solid-js";
 import type { FormError } from "solid-start";
 import { For, Show } from "solid-js";
 
-import { Button, Input, Label } from "./elements";
+import { Button, ErrorLabel, Input, Label } from "./elements";
 
-export const FormInputs: Component<{
+export const CreateFields: Component<{
   hiddenInputs?: { name: string; value: string }[];
-  inputs: { label?: string; props: { name: string; value?: string; type: string; required?: boolean } }[];
+  inputs: { label?: string; props: { name: string; value?: string; type: string } }[];
   submitLable?: string;
   errors?: FormError;
   pending: boolean;
@@ -19,18 +19,16 @@ export const FormInputs: Component<{
       <For each={props.inputs}>
         {(input) => (
           <div class="flex flex-col">
-            <Label class="flex flex-col">
-              {input?.label}
-              <Input
-                type={input.props.type}
-                name={input.props.name}
-                required={input.props.required}
-                // placeholder="you@example.com"
-                value={input.props.value ?? ""}
-              />
-            </Label>
+            <Label invalid={props.errors?.fieldErrors?.[input.props.name] !== undefined}>{input?.label}</Label>
+            <Input
+              type={input.props.type}
+              name={input.props.name}
+              invalid={props.errors?.fieldErrors?.[input.props.name] !== undefined}
+              // placeholder="you@example.com"
+              value={input.props.value ?? ""}
+            />
             <Show when={props.errors?.fieldErrors?.[input.props.name]}>
-              <p class="text-red-500">{props.errors!.fieldErrors![input.props.name]}</p>
+              <ErrorLabel>{props.errors!.fieldErrors![input.props.name]}</ErrorLabel>
             </Show>
           </div>
         )}
@@ -42,7 +40,7 @@ export const FormInputs: Component<{
           </Show>
         </Button>
         <Show when={props.errors?.message}>
-          <p class="text-red-500">{props.errors!.message}</p>
+          <ErrorLabel>{props.errors!.message}</ErrorLabel>
         </Show>
       </div>
     </>

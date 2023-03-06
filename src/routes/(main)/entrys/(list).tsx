@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { RouteDataArgs, useRouteData } from "solid-start";
 import { For, Show, type VoidComponent } from "solid-js";
-import { FormInputs } from "~/frontend/FormInputs";
+import { CreateFields } from "~/frontend/CreateFields";
 import { validateFields } from "~/backend/utils";
 
 /* Data Fetching
@@ -28,14 +28,6 @@ export const routeData = ({}: RouteDataArgs) => {
 /* Frontend
   ============================================ */
 
-const people = [
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-  { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-];
-
 // Page Component
 const ListEntrys: VoidComponent = () => {
   const { timeEntrys } = useRouteData<typeof routeData>();
@@ -47,12 +39,12 @@ const ListEntrys: VoidComponent = () => {
       <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4">
         <CreateTimeEntry.Form class="flex flex-col gap-4 border p-4">
           <h2 class="text-2xl">New Time Entry</h2>
-          <FormInputs
+          <CreateFields
             inputs={[
-              { label: "Name", props: { name: "name", type: "text", required: true } },
-              { label: "Discription", props: { name: "discription", type: "text", required: true } },
-              { label: "Start Time", props: { name: "startTimeLocal", type: "datetime-local", required: true } },
-              { label: "End Time", props: { name: "endTimeLocal", type: "datetime-local", required: true } },
+              { label: "Name", props: { name: "name", type: "text" } },
+              { label: "Discription", props: { name: "discription", type: "text" } },
+              { label: "Start Time", props: { name: "startTimeLocal", type: "datetime-local" } },
+              { label: "End Time", props: { name: "endTimeLocal", type: "datetime-local" } },
             ]}
             errors={CreateTimeEntryAction.error}
             pending={CreateTimeEntryAction.pending}
