@@ -1,12 +1,13 @@
 import { db } from "~/backend/db";
 import { z } from "zod";
-import { FormError, useSearchParams } from "solid-start";
+import { A, FormError, useSearchParams } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
 import { FormInputs } from "~/frontend/FormInputs";
 import { createUserSession, getUser, register } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
+import { Card, Input } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -31,12 +32,13 @@ const Signup: VoidComponent = () => {
   const [SignupAction, Signup] = createServerAction$(signupFn);
 
   return (
-    <main class="container static m-auto flex h-screen flex-col justify-center bg-white">
-      <div class="mx-auto flex max-w-2xl flex-col gap-4">
-        <Signup.Form>
+    <main class="flex h-screen flex-col items-center justify-center">
+      <Card class="flex w-96 flex-col gap-4">
+        <Signup.Form class="flex flex-col gap-3">
+          <h1 class="text-center font-semibold">Signup</h1>
           <FormInputs
+            hiddenInputs={[{ name: "redirectTo", value: searchParams.redirect ?? "/" }]}
             inputs={[
-              { props: { name: "redirectTo", type: "hidden", value: searchParams.redirect ?? "/" } },
               { label: "Email", props: { name: "email", type: "email", required: true } },
               { label: "First Name", props: { name: "firstName", type: "text", required: true } },
               { label: "Last Name", props: { name: "lastName", type: "text", required: true } },
@@ -47,7 +49,19 @@ const Signup: VoidComponent = () => {
             pending={SignupAction.pending}
           />
         </Signup.Form>
-      </div>
+        <div class="flex items-center justify-between">
+          <label class="flex w-fit text-sm">
+            <Input type="checkbox" class="h-5 w-5 scale-75" />
+            Remember Me
+          </label>
+          <p class="text-right text-xs text-neutral-400">
+            Already Have An Account?{" "}
+            <A href="/login" class="text-blue-700 hover:underline">
+              Login
+            </A>
+          </p>
+        </div>
+      </Card>
     </main>
   );
 };

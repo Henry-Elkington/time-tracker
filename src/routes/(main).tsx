@@ -3,7 +3,7 @@ import { createServerAction$, createServerData$, redirect } from "solid-start/se
 import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
 import { getUser, logout } from "~/backend/session";
-import { Button } from "~/frontend/components";
+import { Button } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -31,7 +31,7 @@ const MainLayout: VoidComponent = () => {
 
   return (
     <>
-      <div class="border-b border-gray-300 bg-gray-100">
+      <div class="border-b border-neutral-300 bg-neutral-100">
         <nav class="container mx-auto flex h-12 items-stretch justify-between">
           <div>hi</div>
           <div class="flex items-center gap-3">

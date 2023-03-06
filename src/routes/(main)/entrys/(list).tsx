@@ -58,28 +58,28 @@ const ListEntrys: VoidComponent = () => {
             pending={CreateTimeEntryAction.pending}
           />
         </CreateTimeEntry.Form>
-        <table class="table-fixed divide-y divide-gray-300 whitespace-nowrap">
+        <table class="table-fixed divide-y divide-neutral-300 whitespace-nowrap">
           <thead>
             <tr>
-              <th scope="col" class="text-left text-sm font-semibold text-gray-900 sm:pl-0">
+              <th scope="col" class="text-left text-sm font-semibold text-neutral-900 sm:pl-0">
                 Name
               </th>
-              <th scope="col" class="text-left text-sm font-semibold text-gray-900">
+              <th scope="col" class="text-left text-sm font-semibold text-neutral-900">
                 Discription
               </th>
-              <th scope="col" class="text-left text-sm font-semibold text-gray-900">
+              <th scope="col" class="text-left text-sm font-semibold text-neutral-900">
                 Duration
               </th>
-              <th scope="col" class="text-left text-sm font-semibold text-gray-900" />
+              <th scope="col" class="text-left text-sm font-semibold text-neutral-900" />
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-300">
+          <tbody class="divide-y divide-neutral-300">
             <For each={timeEntrys()}>
               {(entry) => {
                 const [DeleteTimeEntryAction, DeleteTimeEntry] = createServerAction$(deleteTimeEntryFn);
 
                 return (
-                  <tr class="text-gray-500">
+                  <tr class="text-neutral-500">
                     <td class="">{entry.name}</td>
                     <td class="">{entry.discription}</td>
                     <td class="">{entry.lenth / 1000 / 60} minutes</td>
