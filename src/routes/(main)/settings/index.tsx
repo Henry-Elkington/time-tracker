@@ -43,7 +43,7 @@ const Index: VoidComponent = () => {
         <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
           <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
           <Button disabled>Cancel</Button>
-          <Button disabled>Save</Button>
+          <Button disabled>Update</Button>
         </div>
       </Card>
 
@@ -67,7 +67,7 @@ const Index: VoidComponent = () => {
             <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
             <Button type="reset">Cancel</Button>
             <Button disabled={UpdateNamesAction.pending} type="submit">
-              <Show when={UpdateNamesAction.pending} fallback="Save">
+              <Show when={UpdateNamesAction.pending} fallback="Update">
                 Loading...
               </Show>
             </Button>
