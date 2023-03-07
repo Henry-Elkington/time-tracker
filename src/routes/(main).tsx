@@ -32,7 +32,7 @@ const MainLayout: VoidComponent = () => {
   const [dropDownOpen, setDropDownOpen] = createSignal(false);
 
   return (
-    <div class="flex h-full flex-col">
+    <div class="flex h-full w-full flex-col">
       <div class="border-b border-neutral-300 bg-neutral-100">
         <nav class="container mx-auto flex h-10 items-stretch justify-between md:px-10">
           <div class="flex items-stretch divide-x divide-neutral-300 border-r border-l border-neutral-300">
@@ -42,8 +42,8 @@ const MainLayout: VoidComponent = () => {
             <A href="/entrys" class="flex items-center justify-center px-5" activeClass="bg-neutral-300">
               Entry
             </A>
-            <A href="/settings" class="flex items-center justify-center px-5" activeClass="bg-neutral-300">
-              Settings
+            <A href="/billing" class="flex items-center justify-center px-5" activeClass="bg-neutral-300">
+              Billing
             </A>
           </div>
           <div class="flex items-stretch divide-x divide-neutral-300 border-r border-l border-neutral-300">
@@ -57,16 +57,14 @@ const MainLayout: VoidComponent = () => {
               </button>
               <Show when={dropDownOpen()}>
                 <Card class="absolute top-full -right-[1px] -left-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 rounded-t-none bg-neutral-100 p-0 text-right">
-                  <p class="flex items-center justify-end p-2 px-4">ipsum</p>
-                  <p class="flex items-center justify-end p-2 px-4">dolor sit</p>
-                  <p class="flex items-center justify-end p-2 px-4">consectetur</p>
-                  <p class="flex items-center justify-end p-2 px-4">adipisicing</p>
-                  <p class="flex items-center justify-end p-2 px-4">sit amet</p>
+                  <A href="/settings" class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200">
+                    Settings
+                  </A>
                   <button
                     onClick={() => Logout()}
                     name="logout"
                     type="submit"
-                    class="flex items-center justify-end p-2 px-4"
+                    class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200"
                   >
                     Logout
                   </button>
@@ -76,9 +74,11 @@ const MainLayout: VoidComponent = () => {
           </div>
         </nav>
       </div>
-      <main class="container m-auto h-max flex-1 overflow-x-hidden overflow-y-scroll bg-white md:px-10 ">
-        <Outlet />
-      </main>
+      <div class="h-full overflow-x-hidden overflow-y-scroll">
+        <main class="container m-auto md:px-10">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

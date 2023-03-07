@@ -25,10 +25,7 @@ const Profile: VoidComponent = () => {
 
   return (
     <div>
-      <h1 class="p-5 text-center text-4xl">Profile</h1>
-      <For each={[1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1]}>
-        {() => <pre>{JSON.stringify(user(), null, 2)}</pre>}
-      </For>
+      <h1 class="p-5 text-center text-4xl">Billing</h1>
     </div>
   );
 };
