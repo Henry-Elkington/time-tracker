@@ -146,8 +146,6 @@ export default Index;
 async function UpdateNamesFn(formData: FormData) {
   await new Promise((res) => setTimeout(res, 2000));
 
-  console.log("fas");
-
   const data = await validateFields(
     formData,
     z.object({
@@ -156,8 +154,6 @@ async function UpdateNamesFn(formData: FormData) {
       lastName: z.string(),
     })
   );
-
-  console.log(data);
 
   await db.user.update({
     where: {
