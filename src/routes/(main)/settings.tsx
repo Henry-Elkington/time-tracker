@@ -24,10 +24,17 @@ const Profile: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(updateProfileFn);
 
   return (
-    <main class="container m-auto bg-white md:px-10">
+    <div>
       <h1 class="p-5 text-center text-4xl">Profile</h1>
-      <pre>{JSON.stringify(user())}</pre>
-    </main>
+      <For
+        each={[
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1,
+          2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        ]}
+      >
+        {() => <pre>{JSON.stringify(user())}</pre>}
+      </For>
+    </div>
   );
 };
 

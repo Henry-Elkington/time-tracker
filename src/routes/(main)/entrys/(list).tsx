@@ -34,7 +34,7 @@ const ListEntrys: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <main class="container m-auto bg-white md:px-10">
+    <div>
       <h1 class="p-5 text-center text-4xl">Time Entrys</h1>
       <div class="mx-auto flex flex-col gap-4">
         <CreateTimeEntry.Form class="flex flex-col gap-4 border p-4">
@@ -92,7 +92,7 @@ const ListEntrys: VoidComponent = () => {
           </tbody>
         </table>
       </div>
-    </main>
+    </div>
   );
 };
 

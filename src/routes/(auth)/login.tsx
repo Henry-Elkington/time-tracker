@@ -81,8 +81,6 @@ async function loginFn(formData: FormData) {
     })
   );
 
-  console.log(data);
-
   const user = await login(data);
   if (!user) {
     throw new FormError(`Email/Password combination is incorrect`); //, {fields,});

@@ -32,7 +32,7 @@ const MainLayout: VoidComponent = () => {
   const [dropDownOpen, setDropDownOpen] = createSignal(false);
 
   return (
-    <>
+    <div class="flex h-full flex-col">
       <div class="border-b border-neutral-300 bg-neutral-100">
         <nav class="container mx-auto flex h-10 items-stretch justify-between md:px-10">
           <div class="flex items-stretch divide-x divide-neutral-300 border-r border-l border-neutral-300">
@@ -76,8 +76,10 @@ const MainLayout: VoidComponent = () => {
           </div>
         </nav>
       </div>
-      <Outlet />
-    </>
+      <main class="container m-auto h-max flex-1 overflow-x-hidden overflow-y-scroll bg-white md:px-10 ">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
