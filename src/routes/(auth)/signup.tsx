@@ -1,4 +1,4 @@
-import { db } from "~/backend/db";
+import { db, users } from "~/db/schema";
 import { z } from "zod";
 import { A, FormError, useSearchParams } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
@@ -8,6 +8,7 @@ import { CreateFields } from "~/frontend/CreateFields";
 import { createUserSession, getUser, register } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
 import { Card, Input } from "~/frontend/elements";
+import { eq } from "drizzle-orm/expressions";
 
 /* Data Fetching
   ============================================ */
@@ -86,13 +87,9 @@ async function signupFn(formData: FormData) {
   );
 
   const fields = Object.fromEntries(formData);
-  const emailUserExists = await db.user.findUnique({ where: { email: data.email } });
+  const emailUserExists = await db.select().from(users).where(eq(users.email, data.email)).get();
   if (emailUserExists) {
     throw new FormError(`User with email ${data.email} already exists`, { fields });
-  }
-  const usernameUserExists = await db.user.findUnique({ where: { email: data.email } });
-  if (usernameUserExists) {
-    throw new FormError(`User with username ${data.email} already exists`, { fields });
   }
   const user = await register(data);
   if (!user) {

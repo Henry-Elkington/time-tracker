@@ -1,10 +1,11 @@
-import { db } from "~/backend/db";
+import { db, timeEntrys, users } from "~/db/schema";
 import { z } from "zod";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { RouteDataArgs, useRouteData } from "solid-start";
 import { For, Show, type VoidComponent } from "solid-js";
 import { CreateFields } from "~/frontend/CreateFields";
 import { validateFields } from "~/backend/utils";
+import { eq } from "drizzle-orm/expressions";
 
 /* Data Fetching
   ============================================ */
@@ -12,7 +13,7 @@ import { validateFields } from "~/backend/utils";
 export const routeData = ({}: RouteDataArgs) => {
   const timeEntrys = createServerData$(
     async () => {
-      const entrys = await db.timeEntry.findMany();
+      const entrys = db.select().from(timeEntrys).all();
       return entrys.map((entry) => ({
         id: entry.id,
         name: entry.name,
@@ -114,14 +115,15 @@ async function createTimeEntryFn(formData: FormData) {
     })
   );
 
-  await db.timeEntry.create({
-    data: {
+  const newTimeEntry = await db
+    .insert(timeEntrys)
+    .values({
       name: data.name,
       discription: data.discription,
       startTime: data.startTimeLocal,
       endTime: data.endTimeLocal,
-    },
-  });
+    })
+    .run();
 
   return redirect("/entrys");
 }
@@ -131,15 +133,11 @@ async function deleteTimeEntryFn(formData: FormData) {
   const data = await validateFields(
     formData,
     z.object({
-      id: z.string(),
+      id: z.number(),
     })
   );
 
-  const deletedTimeEntry = await db.timeEntry.delete({
-    where: {
-      id: data.id,
-    },
-  });
+  const deletedTimeEntry = await db.delete(timeEntrys).where(eq(timeEntrys.id, data.id)).run();
 
   return redirect("/entrys");
 }

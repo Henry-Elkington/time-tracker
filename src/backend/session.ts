@@ -1,6 +1,7 @@
+import { eq } from "drizzle-orm/expressions";
 import { redirect } from "solid-start/server";
 import { createCookieSessionStorage } from "solid-start/session";
-import { db } from "~/backend/db";
+import { db, users } from "~/db/schema";
 
 type SignupForm = {
   email: string;
@@ -15,18 +16,20 @@ type LoginForm = {
 };
 
 export async function register({ email, firstName, lastName, password }: SignupForm) {
-  return db.user.create({
-    data: {
+  return db
+    .insert(users)
+    .values({
+      id: Math.floor(Math.random() * 1000),
       email,
       firstName,
       lastName,
       password,
-    },
-  });
+    })
+    .run();
 }
 
 export async function login({ email, password }: LoginForm) {
-  const user = await db.user.findUnique({ where: { email } });
+  const user = await db.select().from(users).where(eq(users.email, email)).get();
   if (!user) return null;
   const isCorrectPassword = password === user.password;
   if (!isCorrectPassword) return null;
@@ -57,7 +60,7 @@ export function getUserSession(request: Request) {
 export async function getUserId(request: Request) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
+  if (!userId || typeof userId !== "number") return null;
   return userId;
 }
 
@@ -73,12 +76,12 @@ export async function requireUserId(request: Request, redirectTo: string = new U
 
 export async function getUser(request: Request) {
   const userId = await getUserId(request);
-  if (typeof userId !== "string") {
+  if (typeof userId !== "number") {
     return null;
   }
 
   try {
-    const user = await db.user.findUnique({ where: { id: String(userId) } });
+    const user = await db.select().from(users).where(eq(users.id, userId)).get();
     return user;
   } catch {
     throw logout(request);

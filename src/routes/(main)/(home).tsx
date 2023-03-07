@@ -1,16 +1,12 @@
-import { db } from "~/backend/db";
-import { z } from "zod";
-import { createServerAction$, redirect } from "solid-start/server";
-import { RouteDataArgs, useRouteData } from "solid-start";
+import { type RouteDataArgs, useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
-import { validateFields } from "~/backend/utils";
-import type routeDataMainType from "../(main)";
+import type { MainLayoutRouteDataType } from "../(main)";
 
 /* Data Fetching
   ============================================ */
 
 export type routeDataProfileType = typeof routeData;
-export const routeData = ({ data }: RouteDataArgs<routeDataMainType>) => {
+export const routeData = ({ data }: RouteDataArgs<MainLayoutRouteDataType>) => {
   return { user: data };
 };
 
@@ -20,7 +16,6 @@ export const routeData = ({ data }: RouteDataArgs<routeDataMainType>) => {
 // Page Component
 const Profile: VoidComponent = () => {
   const { user } = useRouteData<routeDataProfileType>();
-  const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(updateProfileFn);
 
   return (
     <div>
@@ -33,22 +28,3 @@ export default Profile;
 
 /* Actions
   ============================================ */
-
-async function updateProfileFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      id: z.string(),
-    })
-  );
-
-  const deletedTimeEntry = await db.timeEntry.delete({
-    where: {
-      id: data.id,
-    },
-  });
-
-  return redirect("/entrys");
-}

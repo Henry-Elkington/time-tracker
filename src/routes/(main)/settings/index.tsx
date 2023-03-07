@@ -2,12 +2,14 @@ import { Show, type VoidComponent } from "solid-js";
 import { redirect, RouteDataArgs, useRouteData } from "solid-start";
 import { createServerAction$ } from "solid-start/server";
 import { z } from "zod";
-import { db } from "~/backend/db";
+import { db } from "~/db/schema";
 import { logout } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
+import { users } from "~/db/schema";
 
 import { Button, Card, Input, Label } from "~/frontend/elements";
 import { MainLayoutRouteDataType } from "~/routes/(main)";
+import { eq } from "drizzle-orm/expressions";
 
 /* Data Fetching
   ============================================ */
@@ -121,21 +123,13 @@ async function UpdateNamesFn(formData: FormData) {
   const data = await validateFields(
     formData,
     z.object({
-      id: z.string(),
+      id: z.number(),
       firstName: z.string(),
       lastName: z.string(),
     })
   );
 
-  await db.user.update({
-    where: {
-      id: data.id,
-    },
-    data: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-    },
-  });
+  await db.update(users).set({ firstName: data.firstName, lastName: data.lastName }).where(eq(users.id, data.id)).run();
 
   return redirect("/settings");
 }
@@ -145,42 +139,12 @@ async function UpdateEmailFn(formData: FormData) {
   const data = await validateFields(
     formData,
     z.object({
-      id: z.string(),
+      id: z.number(),
       email: z.string(),
     })
   );
 
-  await db.user.update({
-    where: {
-      id: data.id,
-    },
-    data: {
-      email: data.email,
-    },
-  });
+  await db.update(users).set({ email: data.email }).where(eq(users.id, data.id)).run();
 
   return redirect("/settings");
-}
-async function UpdatePasswordFn(formData: FormData, { request }: { request: Request }) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      id: z.string(),
-      password: z.string(),
-      confirmPassword: z.string(),
-    })
-  );
-
-  await db.user.update({
-    where: {
-      id: data.id,
-    },
-    data: {
-      password: data.password,
-    },
-  });
-
-  return logout(request);
 }

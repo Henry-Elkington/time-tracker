@@ -1,13 +1,14 @@
 import { Show, type VoidComponent } from "solid-js";
-import { redirect, RouteDataArgs, useRouteData } from "solid-start";
+import { RouteDataArgs, useRouteData } from "solid-start";
 import { createServerAction$ } from "solid-start/server";
 import { z } from "zod";
-import { db } from "~/backend/db";
+import { db, users } from "~/db/schema";
 import { logout } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
 
 import { Button, Card, Input, Label } from "~/frontend/elements";
 import { MainLayoutRouteDataType } from "~/routes/(main)";
+import { eq } from "drizzle-orm/expressions";
 
 /* Data Fetching
   ============================================ */
@@ -69,20 +70,22 @@ async function UpdatePasswordFn(formData: FormData, { request }: { request: Requ
   const data = await validateFields(
     formData,
     z.object({
-      id: z.string(),
+      id: z.number(),
       password: z.string(),
       confirmPassword: z.string(),
     })
   );
 
-  await db.user.update({
-    where: {
-      id: data.id,
-    },
-    data: {
-      password: data.password,
-    },
-  });
+  await db.update(users).set({ password: data.password }).where(eq(users.id, data.id)).run();
+
+  // user.update({
+  //   where: {
+  //     id: data.id,
+  //   },
+  //   data: {
+  //     password: data.password,
+  //   },
+  // });
 
   return logout(request);
 }
