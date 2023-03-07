@@ -86,9 +86,13 @@ async function signupFn(formData: FormData) {
   );
 
   const fields = Object.fromEntries(formData);
-  const userExists = await db.user.findUnique({ where: { email: data.email } });
-  if (userExists) {
+  const emailUserExists = await db.user.findUnique({ where: { email: data.email } });
+  if (emailUserExists) {
     throw new FormError(`User with email ${data.email} already exists`, { fields });
+  }
+  const usernameUserExists = await db.user.findUnique({ where: { email: data.email } });
+  if (usernameUserExists) {
+    throw new FormError(`User with username ${data.email} already exists`, { fields });
   }
   const user = await register(data);
   if (!user) {

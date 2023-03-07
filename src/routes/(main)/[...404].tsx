@@ -1,5 +1,4 @@
 import { VoidComponent } from "solid-js";
-import { Card } from "~/frontend/elements";
 
 const ErrorPage: VoidComponent = () => {
   return (
