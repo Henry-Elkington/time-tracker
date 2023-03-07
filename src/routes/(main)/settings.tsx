@@ -26,7 +26,7 @@ const Settings: VoidComponent = () => {
             </A>
           </li>
         </ul>
-        <div class="flex w-3/4 flex-col gap-5">
+        <div class="flex w-3/4 flex-col gap-5 pb-5">
           <Outlet />
         </div>
       </div>
