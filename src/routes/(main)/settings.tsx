@@ -27,7 +27,7 @@ const Settings: VoidComponent = () => {
     <div>
       <h1 class="p-3 py-5 text-4xl">Settings</h1>
       <hr class="border-neutral-300 py-3" />
-      <div class="flex">
+      <div class="flex pb-5">
         <ul class="w-1/4">
           <li>
             <A href="#profile">Profile</A>
