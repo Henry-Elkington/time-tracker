@@ -53,6 +53,7 @@ const MainLayout: VoidComponent = () => {
                 onClick={() => setDropDownOpen(!dropDownOpen())}
               >
                 {user()?.firstName + " " + user()?.lastName}
+                <img src="/default-user.png" class="ml-3 h-7 w-7 rounded-full" />
               </button>
               <Show when={dropDownOpen()}>
                 <Card class="absolute top-full -right-[1px] -left-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 rounded-t-none bg-neutral-100 p-0 text-right">
