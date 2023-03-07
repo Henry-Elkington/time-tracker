@@ -8,17 +8,16 @@ import { Card } from "~/frontend/elements";
 /* Data Fetching
   ============================================ */
 
-export type routeDataMainType = typeof routeData;
+export type MainLayoutRouteDataType = typeof routeData;
 export const routeData = () => {
-  return createServerData$(async (_, { request }) => {
+  const user = createServerData$(async (_, { request }) => {
     const user = await getUser(request);
-
     if (!user) {
       throw redirect("/login");
     }
-
     return user;
   });
+  return { user: user };
 };
 
 /* Frontend
@@ -26,7 +25,7 @@ export const routeData = () => {
 
 // Page Component
 const MainLayout: VoidComponent = () => {
-  const user = useRouteData<routeDataMainType>();
+  const { user } = useRouteData<typeof routeData>();
   const [LogoutAction, Logout] = createServerAction$((_, { request }) => logout(request));
 
   const [dropDownOpen, setDropDownOpen] = createSignal(false);

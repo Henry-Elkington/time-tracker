@@ -1,11 +1,10 @@
 import { db } from "~/backend/db";
 import { z } from "zod";
-import { createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { createServerAction$, redirect } from "solid-start/server";
 import { RouteDataArgs, useRouteData } from "solid-start";
-import { For, Show, type VoidComponent } from "solid-js";
-import { CreateFields } from "~/frontend/CreateFields";
+import { type VoidComponent } from "solid-js";
 import { validateFields } from "~/backend/utils";
-import { routeDataMainType } from "../(main)";
+import type routeDataMainType from "../(main)";
 
 /* Data Fetching
   ============================================ */
