@@ -18,29 +18,28 @@ export const routeData = ({ data }: RouteDataArgs<routeDataMainType>) => {
 /* Frontend
   ============================================ */
 
-// Page Component
-const Profile: VoidComponent = () => {
+const Settings: VoidComponent = () => {
   const { user } = useRouteData<routeDataProfileType>();
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(updateProfileFn);
 
   return (
     <div>
-      <h1 class="p-5 text-center text-4xl">Profile</h1>
-      <For each={[1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1]}>
-        {() => <pre>{JSON.stringify(user(), null, 2)}</pre>}
-      </For>
+      <h1 class="p-3 py-5 text-4xl">Settings</h1>
+      <hr class="border-neutral-300" />
+      <p>{user()?.email}</p>
+      <p>{user()?.firstName}</p>
+      <p>{user()?.lastName}</p>
+      <p>{user()?.password}</p>
     </div>
   );
 };
 
-export default Profile;
+export default Settings;
 
 /* Actions
   ============================================ */
 
 async function updateProfileFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
   const data = await validateFields(
     formData,
     z.object({
