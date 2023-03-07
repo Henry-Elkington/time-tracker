@@ -14,6 +14,7 @@ netlify
 .classpath
 *.launch
 .settings/
+.vscode
 
 # Temp
 gitignore
@@ -23,3 +24,6 @@ gitignore
 Thumbs.db
 
 .env
+
+# database
+/prisma/db.sqlite
