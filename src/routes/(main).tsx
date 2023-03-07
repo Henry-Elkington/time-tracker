@@ -34,9 +34,9 @@ const MainLayout: VoidComponent = () => {
   return (
     <>
       <div class="border-b border-neutral-300 bg-neutral-100">
-        <nav class="container mx-auto flex h-12 items-stretch justify-between">
+        <nav class="container mx-auto flex h-10 items-stretch justify-between md:px-10">
           <div class="flex items-stretch divide-x divide-neutral-300 border-r border-l border-neutral-300">
-            <A href="/" class="flex items-center justify-center px-5">
+            <A href="/" class="flex items-center justify-center px-5" activeClass="bg-neutral-300" end={true}>
               Home
             </A>
             <A href="/entrys" class="flex items-center justify-center px-5" activeClass="bg-neutral-300">
@@ -57,15 +57,11 @@ const MainLayout: VoidComponent = () => {
               </button>
               <Show when={dropDownOpen()}>
                 <Card class="absolute top-full -right-[1px] -left-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 rounded-t-none bg-neutral-100 p-0 text-right">
-                  <A href="/" class="flex items-center justify-end p-2 px-4">
-                    Home Lorem
-                  </A>
-                  <A href="/entrys" class="flex items-center justify-end p-2 px-4">
-                    Entry ipsum
-                  </A>
-                  <A href="/settings" class="flex items-center justify-end p-2 px-4">
-                    Settings Lorem
-                  </A>
+                  <p class="flex items-center justify-end p-2 px-4">ipsum</p>
+                  <p class="flex items-center justify-end p-2 px-4">dolor sit</p>
+                  <p class="flex items-center justify-end p-2 px-4">consectetur</p>
+                  <p class="flex items-center justify-end p-2 px-4">adipisicing</p>
+                  <p class="flex items-center justify-end p-2 px-4">sit amet</p>
                   <button
                     onClick={() => Logout()}
                     name="logout"

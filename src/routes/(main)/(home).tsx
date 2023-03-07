@@ -25,8 +25,7 @@ const Profile: VoidComponent = () => {
 
   return (
     <main class="container m-auto bg-white md:px-10">
-      <h1 class="p-5 text-center text-4xl">Profile</h1>
-      <pre>{JSON.stringify(user())}</pre>
+      <h1 class="p-5 text-center text-4xl">Home</h1>
     </main>
   );
 };
