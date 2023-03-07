@@ -3,8 +3,7 @@ import { createServerAction$, createServerData$, redirect } from "solid-start/se
 import { useRouteData } from "solid-start";
 import { createSignal, Show, type VoidComponent } from "solid-js";
 import { getUser, logout } from "~/backend/session";
-import { Button, Card } from "~/frontend/elements";
-import { Portal } from "solid-js/web";
+import { Card } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -78,14 +77,6 @@ const MainLayout: VoidComponent = () => {
                 </Card>
               </Show>
             </div>
-
-            {/* <li>
-              <Logout.Form>
-                <Button name="logout" type="submit">
-                  Logout
-                </Button>
-              </Logout.Form>
-            </li> */}
           </div>
         </nav>
       </div>

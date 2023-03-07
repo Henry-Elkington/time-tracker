@@ -7,18 +7,29 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model TimeEntry {
-    id          String   @id @default(uuid())
-    name        String
-    discription String
-    startTime   DateTime
-    endTime     DateTime
-}
-
 model User {
-    id        String @id @default(uuid())
+    id String @id @default(cuid())
+
     email     String @unique
     firstName String
     lastName  String
-    password  String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    password   String
+    TimeEntrys TimeEntry[]
+}
+
+model TimeEntry {
+    id String @id @default(uuid())
+
+    name        String
+    discription String
+
+    startTime DateTime
+    endTime   DateTime
+
+    User   User?   @relation(fields: [userId], references: [id])
+    userId String?
 }
