@@ -82,7 +82,6 @@ const Index: VoidComponent = () => {
             <div class="flex gap-3">
               <input type="hidden" name="id" value={user()?.id} />
               <Input value={user()?.email} type="email" name="email" />
-              <Button type="submit">Save</Button>
             </div>
           </div>
           <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
