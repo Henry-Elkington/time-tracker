@@ -26,7 +26,7 @@ const Index: VoidComponent = () => {
   return (
     <>
       <h2 id="profile-settings" class="pt-5 text-2xl">
-        Profile Settings
+        General Settings
       </h2>
 
       <Card class="p-0">
@@ -40,7 +40,7 @@ const Index: VoidComponent = () => {
           <img src="/default-user.png" loading="lazy" class="h-16 w-16" decoding="async" />
         </div>
         <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
-          <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
+          <p class="grow text-neutral-500">Your Avatar. This will be shown to other people.</p>
           <Button disabled>Cancel</Button>
           <Button disabled>Update</Button>
         </div>
@@ -63,7 +63,7 @@ const Index: VoidComponent = () => {
             </div>
           </div>
           <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
-            <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
+            <p class="grow text-neutral-500">Your first and last name. This will be shown to other people.</p>
             <Button type="reset">Cancel</Button>
             <Button disabled={UpdateNamesAction.pending} type="submit">
               <Show when={UpdateNamesAction.pending} fallback="Update">
@@ -103,7 +103,7 @@ const Index: VoidComponent = () => {
           </div>
         </div>
         <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
-          <p class="grow py-0.5 text-neutral-500">The email you use to sign in and get notifications with.</p>
+          <p class="grow py-0.5 text-neutral-500">Your accounts Unique Identifier. You cannot change this.</p>
         </div>
       </Card>
     </>

@@ -45,7 +45,7 @@ const Index: VoidComponent = () => {
             </div>
           </div>
           <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
-            <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
+            <p class="grow text-neutral-500">The password for your account, between 2 and 32 characters.</p>
             <Button disabled={UpdatePasswordAction.pending} type="submit">
               <Show when={UpdatePasswordAction.pending} fallback="Update">
                 Loading...
