@@ -22,7 +22,6 @@ const Index: VoidComponent = () => {
   const { user } = useRouteData<typeof routeData>();
   const [UpdateNamesAction, UpdateNames] = createServerAction$(UpdateNamesFn);
   const [UpdateEmailAction, UpdateEmail] = createServerAction$(UpdateEmailFn);
-  const [UpdatePasswordAction, UpdatePassword] = createServerAction$(UpdatePasswordFn);
 
   return (
     <>
@@ -106,33 +105,6 @@ const Index: VoidComponent = () => {
         <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
           <p class="grow py-0.5 text-neutral-500">The email you use to sign in and get notifications with.</p>
         </div>
-      </Card>
-
-      <Card class="p-0">
-        <UpdatePassword.Form>
-          <div class="flex flex-col gap-3 p-5">
-            <h3 class="text-xl">Your Password</h3>
-            <div class="flex gap-3">
-              <input type="hidden" name="id" value={user()?.id} />
-              <Label class="flex flex-col">
-                Password:
-                <Input type="password" name="password" />
-              </Label>
-              <Label class="flex flex-col">
-                Confirm Password:
-                <Input type="password" name="confirmPassword" />
-              </Label>
-            </div>
-          </div>
-          <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
-            <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
-            <Button disabled={UpdatePasswordAction.pending} type="submit">
-              <Show when={UpdatePasswordAction.pending} fallback="Update">
-                Loading...
-              </Show>
-            </Button>
-          </div>
-        </UpdatePassword.Form>
       </Card>
     </>
   );

@@ -18,11 +18,8 @@ const Settings: VoidComponent = () => {
             <A href="/settings/" class="px-3">
               General
             </A>
-            <A href="/settings/adipisicing" class="px-3">
-              Adipisicing
-            </A>
-            <A href="/settings/consectetur" class="px-3">
-              Consectetur
+            <A href="/settings/security" class="px-3">
+              Security
             </A>
           </li>
         </ul>
