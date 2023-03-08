@@ -128,7 +128,7 @@ const ListEntrys: VoidComponent = () => {
 
   return (
     <Page title="Time Entrys">
-      <div class="flex flex-col items-start gap-10 lg:flex-row lg:items-stretch">
+      <div class="flex flex-col items-start gap-10 lg:flex-row lg:items-start">
         <CreateTimeEntryForm />
         <TimeEntryList />
       </div>
