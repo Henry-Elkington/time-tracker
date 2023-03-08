@@ -1,18 +1,21 @@
 import { db } from "~/backend";
 import { z } from "zod";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { useRouteData } from "solid-start";
+import { RouteDataArgs, useRouteData } from "solid-start";
 import { For, Show, type VoidComponent } from "solid-js";
 import { validateFields } from "~/backend/utils";
 import { InputComponent, Page, Button, Card, ErrorLabel } from "~/frontend/components";
+import type { MainLayoutRouteDataType } from "../(main)";
+import { getUserId } from "~/backend/session";
 
 /* Data Fetching
   ============================================ */
 
-export const routeData = () => {
+export const routeData = (RouteDataArgs: RouteDataArgs<MainLayoutRouteDataType>) => {
   const timeEntrys = createServerData$(
-    async () => {
-      const entrys = await db.timeEntry.findMany();
+    async (_, { request }) => {
+      const userId = await getUserId(request);
+      const entrys = await db.timeEntry.findMany({ where: { userId: userId } });
       return entrys.map((entry) => ({
         id: entry.id,
         name: entry.name,
@@ -22,7 +25,7 @@ export const routeData = () => {
     },
     { key: ["timeEntrys"] }
   );
-  return { timeEntrys: timeEntrys };
+  return { user: RouteDataArgs.data.user, timeEntrys: timeEntrys };
 };
 
 /* Frontend
@@ -30,12 +33,13 @@ export const routeData = () => {
 
 // Page Component
 const ListEntrys: VoidComponent = () => {
-  const { timeEntrys } = useRouteData<typeof routeData>();
+  const { user, timeEntrys } = useRouteData<typeof routeData>();
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   const CreateTimeEntryForm = () => (
     <CreateTimeEntry.Form class="flex w-full flex-col gap-3 lg:w-80">
       <div class="flex flex-col gap-3">
+        <input name="userId" value={user()?.id} type="hidden" />
         <InputComponent
           name="name"
           type="text"
@@ -143,6 +147,7 @@ async function createTimeEntryFn(formData: FormData) {
   const data = await validateFields(
     formData,
     z.object({
+      userId: z.string(),
       name: z.string().min(5),
       discription: z.string(),
       startTimeLocal: z.coerce.date(),
@@ -156,6 +161,7 @@ async function createTimeEntryFn(formData: FormData) {
       discription: data.discription,
       startTime: data.startTimeLocal,
       endTime: data.endTimeLocal,
+      userId: data.userId,
     },
   });
 
