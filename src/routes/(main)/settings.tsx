@@ -8,8 +8,7 @@ import { z } from "zod";
 import { db } from "~/backend";
 import { logout } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { Button, Card } from "~/frontend/elements";
-import { InputComponent } from "~/frontend/components";
+import { InputComponent, Button, Card } from "~/frontend/components";
 import type { MainLayoutRouteDataType } from "~/routes/(main)";
 
 /* Data Fetching
@@ -74,10 +73,8 @@ const Settings: VoidComponent = () => {
             <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
               <p class="grow text-neutral-500">Your first and last name. This will be shown to other people.</p>
               <Button type="reset">Cancel</Button>
-              <Button disabled={UpdateNamesAction.pending} type="submit">
-                <Show when={UpdateNamesAction.pending} fallback="Update">
-                  Loading...
-                </Show>
+              <Button disabled={UpdateNamesAction.pending} loading={UpdateNamesAction.pending} type="submit">
+                Update
               </Button>
             </div>
           </UpdateNames.Form>
@@ -102,10 +99,8 @@ const Settings: VoidComponent = () => {
             <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
               <p class="grow text-neutral-500">The email you use to sign in and get notifications with.</p>
               <Button type="reset">Cancel</Button>
-              <Button disabled={UpdateEmailAction.pending} type="submit">
-                <Show when={UpdateEmailAction.pending} fallback="Update">
-                  Loading...
-                </Show>
+              <Button disabled={UpdateEmailAction.pending} type="submit" loading={UpdateEmailAction.pending}>
+                Update
               </Button>
             </div>
           </UpdateEmail.Form>
@@ -158,10 +153,8 @@ const Settings: VoidComponent = () => {
             <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
               <p class="grow text-neutral-500">The password for your account, between 2 and 32 characters.</p>
               <Button type="reset">Cancel</Button>
-              <Button disabled={UpdatePasswordAction.pending} type="submit">
-                <Show when={UpdatePasswordAction.pending} fallback="Update">
-                  Loading...
-                </Show>
+              <Button disabled={UpdatePasswordAction.pending} type="submit" loading={UpdatePasswordAction.pending}>
+                Update
               </Button>
             </div>
           </UpdatePassword.Form>

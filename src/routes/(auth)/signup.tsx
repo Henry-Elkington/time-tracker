@@ -6,8 +6,7 @@ import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
 import { createUserSession, getUser, register } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { InputComponent } from "~/frontend/components";
-import { Button, Card, ErrorLabel, Input } from "~/frontend/elements";
+import { InputComponent, Button, Card, ErrorLabel, Input } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -70,7 +69,9 @@ const Signup: VoidComponent = () => {
             class="w-full"
           />
           <div class="flex flex-col pt-3">
-            <Button disabled={SignupAction.pending}>Signup</Button>
+            <Button disabled={SignupAction.pending} loading={SignupAction.pending}>
+              Signup
+            </Button>
             <ErrorLabel>{SignupAction.error?.message}</ErrorLabel>
           </div>
         </Signup.Form>

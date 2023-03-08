@@ -1,8 +1,0 @@
-.env
-Dockerfile
-docker-compose*
-npm-debug.log
-README.md
-.git
-.gitignore
-.vscode

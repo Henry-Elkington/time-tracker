@@ -4,7 +4,7 @@ import { createServerAction$, createServerData$, redirect } from "solid-start/se
 import { useRouteData } from "solid-start";
 import { createSignal, Show, type VoidComponent } from "solid-js";
 import { getUser, logout } from "~/backend/session";
-import { Card } from "~/frontend/elements";
+import { Card } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */

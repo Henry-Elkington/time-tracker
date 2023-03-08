@@ -4,8 +4,7 @@ import { createServerAction$, createServerData$, redirect } from "solid-start/se
 import { useRouteData } from "solid-start";
 import { For, Show, type VoidComponent } from "solid-js";
 import { validateFields } from "~/backend/utils";
-import { InputComponent, Page } from "~/frontend/components";
-import { Button, Card, ErrorLabel } from "~/frontend/elements";
+import { InputComponent, Page, Button, Card, ErrorLabel } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -79,7 +78,9 @@ const ListEntrys: VoidComponent = () => {
               </div>
             </div>
             <div class="flex flex-col">
-              <Button disabled={CreateTimeEntryAction.pending}>Submit</Button>
+              <Button disabled={CreateTimeEntryAction.pending} loading={CreateTimeEntryAction.pending}>
+                Submit
+              </Button>
               <ErrorLabel>{CreateTimeEntryAction.error?.message}</ErrorLabel>
             </div>
           </CreateTimeEntry.Form>
