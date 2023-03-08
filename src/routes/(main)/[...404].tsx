@@ -1,11 +1,8 @@
-import { VoidComponent } from "solid-js";
+import type { VoidComponent } from "solid-js";
+import { Page } from "~/frontend/components";
 
 const ErrorPage: VoidComponent = () => {
-  return (
-    <main class="flex h-screen flex-col items-center justify-center">
-      <h1 class="p-10 text-center text-xl font-bold">404: page not found</h1>
-    </main>
-  );
+  return <Page title="404: Page Not Found"></Page>;
 };
 
 export default ErrorPage;

@@ -1,13 +1,12 @@
-import { db } from "~/backend/db";
 import { z } from "zod";
-import { A, FormError, RouteDataArgs, useParams, useSearchParams } from "solid-start";
+import { A, FormError } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
-import { createSignal, For, type VoidComponent } from "solid-js";
-import { CreateFields } from "~/frontend/CreateFields";
+import { type VoidComponent } from "solid-js";
 import { createUserSession, getUser, login } from "~/backend/session";
-import { Button, Card, Input } from "~/frontend/elements";
+import { InputComponent } from "~/frontend/components";
 import { validateFields } from "~/backend/utils";
+import { Card, ErrorLabel, Input, Button } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -28,28 +27,38 @@ export const routeData = () => {
 const Login: VoidComponent = () => {
   const data = useRouteData<typeof routeData>();
   const use = data();
-  const [searchParams] = useSearchParams();
   const [LoginAction, Login] = createServerAction$(loginFn);
 
   return (
     <main class="flex h-screen flex-col items-center justify-center">
-      <Card class="flex w-96 flex-col gap-4">
+      <Card class="flex w-96 flex-col gap-4 p-5">
         <Login.Form class="flex flex-col gap-3">
           <h1 class="text-center font-semibold">Login</h1>
-          <CreateFields
-            hiddenInputs={[{ name: "redirectTo", value: searchParams.redirect ?? "/" }]}
-            inputs={[
-              { label: "Email", props: { name: "email", type: "email" } },
-              { label: "Password", props: { name: "password", type: "password" } },
-            ]}
-            submitLable="Signup"
-            errors={LoginAction.error}
-            pending={LoginAction.pending}
+          <input name="redirectTo" type="hidden" value="" />
+          <InputComponent
+            name="email"
+            type="email"
+            errorMessage={LoginAction.error?.fieldErrors?.email}
+            invalid={false}
+            lableText="Email:"
+            class="w-full"
           />
+          <InputComponent
+            name="password"
+            type="password"
+            errorMessage={LoginAction.error?.fieldErrors?.password}
+            invalid={false}
+            lableText="Password:"
+            class="w-full"
+          />
+          <div class="flex flex-col pt-3">
+            <Button disabled={LoginAction.pending}>Login</Button>
+            <ErrorLabel>{LoginAction.error?.message}</ErrorLabel>
+          </div>
         </Login.Form>
         <div class="flex items-center justify-between">
           <label class="flex w-fit text-sm">
-            <Input type="checkbox" class="h-5 w-5 scale-75" />
+            <Input invalid={false} type="checkbox" class="h-5 w-5 scale-75" />
             Remember Me
           </label>
           <p class="text-right text-xs text-neutral-400">

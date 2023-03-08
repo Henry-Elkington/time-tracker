@@ -1,13 +1,13 @@
-import { db } from "~/backend/db";
+import { db } from "~/backend";
 import { z } from "zod";
 import { A, FormError, useSearchParams } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
-import { CreateFields } from "~/frontend/CreateFields";
 import { createUserSession, getUser, register } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { Card, Input } from "~/frontend/elements";
+import { InputComponent } from "~/frontend/components";
+import { Button, Card, ErrorLabel, Input } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
@@ -33,25 +33,50 @@ const Signup: VoidComponent = () => {
 
   return (
     <main class="flex h-screen flex-col items-center justify-center">
-      <Card class="flex w-96 flex-col gap-4">
+      <Card class="flex w-96 flex-col gap-4 p-5">
         <Signup.Form class="flex flex-col gap-3">
-          <h1 class="text-center font-semibold">Signup</h1>
-          <CreateFields
-            hiddenInputs={[{ name: "redirectTo", value: searchParams.redirect ?? "/" }]}
-            inputs={[
-              { label: "Email", props: { name: "email", type: "email" } },
-              { label: "First Name", props: { name: "firstName", type: "text" } },
-              { label: "Last Name", props: { name: "lastName", type: "text" } },
-              { label: "Password", props: { name: "password", type: "password" } },
-            ]}
-            submitLable="Login"
-            errors={SignupAction.error}
-            pending={SignupAction.pending}
+          <h1 class="text-center font-semibold">Login</h1>
+          <input name="redirectTo" type="hidden" value="" />
+          <InputComponent
+            name="email"
+            type="email"
+            errorMessage={SignupAction.error?.fieldErrors?.email}
+            invalid={false}
+            lableText="Email:"
+            class="w-full"
           />
+          <InputComponent
+            name="firstName"
+            type="text"
+            errorMessage={SignupAction.error?.fieldErrors?.email}
+            invalid={false}
+            lableText="First Name:"
+            class="w-full"
+          />
+          <InputComponent
+            name="lastName"
+            type="text"
+            errorMessage={SignupAction.error?.fieldErrors?.email}
+            invalid={false}
+            lableText="Last Name:"
+            class="w-full"
+          />
+          <InputComponent
+            name="password"
+            type="password"
+            errorMessage={SignupAction.error?.fieldErrors?.password}
+            invalid={false}
+            lableText="Password:"
+            class="w-full"
+          />
+          <div class="flex flex-col pt-3">
+            <Button disabled={SignupAction.pending}>Signup</Button>
+            <ErrorLabel>{SignupAction.error?.message}</ErrorLabel>
+          </div>
         </Signup.Form>
         <div class="flex items-center justify-between">
           <label class="flex w-fit text-sm">
-            <Input type="checkbox" class="h-5 w-5 scale-75" />
+            <Input invalid={false} type="checkbox" class="h-5 w-5 scale-75" />
             Remember Me
           </label>
           <p class="text-right text-xs text-neutral-400">
@@ -65,6 +90,13 @@ const Signup: VoidComponent = () => {
     </main>
   );
 };
+
+// {[
+//   { label: "Email", props: { name: "email", type: "email" } },
+//   { label: "First Name", props: { name: "firstName", type: "text" } },
+//   { label: "Last Name", props: { name: "lastName", type: "text" } },
+//   { label: "Password", props: { name: "password", type: "password" } },
+// ]}
 
 export default Signup;
 

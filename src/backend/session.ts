@@ -1,6 +1,6 @@
 import { redirect } from "solid-start/server";
 import { createCookieSessionStorage } from "solid-start/session";
-import { db } from "~/backend/db";
+import { db } from "~/backend";
 
 type SignupForm = {
   email: string;

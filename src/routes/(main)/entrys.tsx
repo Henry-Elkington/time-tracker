@@ -1,15 +1,16 @@
-import { db } from "~/backend/db";
+import { db } from "~/backend";
 import { z } from "zod";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { RouteDataArgs, useRouteData } from "solid-start";
+import { useRouteData } from "solid-start";
 import { For, Show, type VoidComponent } from "solid-js";
-import { CreateFields } from "~/frontend/CreateFields";
 import { validateFields } from "~/backend/utils";
+import { InputComponent, Page } from "~/frontend/components";
+import { Button, Card, ErrorLabel } from "~/frontend/elements";
 
 /* Data Fetching
   ============================================ */
 
-export const routeData = ({}: RouteDataArgs) => {
+export const routeData = () => {
   const timeEntrys = createServerData$(
     async () => {
       const entrys = await db.timeEntry.findMany();
@@ -34,23 +35,56 @@ const ListEntrys: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <div>
-      <h1 class="p-5 text-center text-4xl">Time Entrys</h1>
-      <div class="mx-auto flex flex-col gap-4">
-        <CreateTimeEntry.Form class="flex flex-col gap-4 border p-4">
-          <h2 class="text-2xl">New Time Entry</h2>
-          <CreateFields
-            inputs={[
-              { label: "Name", props: { name: "name", type: "text" } },
-              { label: "Discription", props: { name: "discription", type: "text" } },
-              { label: "Start Time", props: { name: "startTimeLocal", type: "datetime-local" } },
-              { label: "End Time", props: { name: "endTimeLocal", type: "datetime-local" } },
-            ]}
-            errors={CreateTimeEntryAction.error}
-            pending={CreateTimeEntryAction.pending}
-          />
-        </CreateTimeEntry.Form>
-        <table class="table-fixed divide-y divide-neutral-300 whitespace-nowrap">
+    <Page title="Time Entrys">
+      <div class="mx-auto flex max-w-3xl flex-col gap-4">
+        <Card class="p-3">
+          <CreateTimeEntry.Form class="flex flex-col gap-3">
+            <h2 class="text-2xl">New Time Entry</h2>
+            <div class="flex gap-3">
+              <div class="w-full">
+                <InputComponent
+                  name="name"
+                  type="text"
+                  errorMessage={CreateTimeEntryAction.error?.fieldErrors?.name}
+                  invalid={false}
+                  lableText="Name:"
+                  class="w-full"
+                />
+                <InputComponent
+                  name="discription"
+                  type="text"
+                  errorMessage={CreateTimeEntryAction.error?.fieldErrors?.discription}
+                  invalid={false}
+                  lableText="Discription:"
+                  class="w-full"
+                />
+              </div>
+              <div class="w-full">
+                <InputComponent
+                  name="startTimeLocal"
+                  type="datetime-local"
+                  errorMessage={CreateTimeEntryAction.error?.fieldErrors?.startTimeLocal}
+                  invalid={false}
+                  lableText="Start Time:"
+                  class="w-full"
+                />
+                <InputComponent
+                  name="endTimeLocal"
+                  type="datetime-local"
+                  errorMessage={CreateTimeEntryAction.error?.fieldErrors?.endTimeLocal}
+                  invalid={false}
+                  lableText="End Time:"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <Button disabled={CreateTimeEntryAction.pending}>Submit</Button>
+              <ErrorLabel>{CreateTimeEntryAction.error?.message}</ErrorLabel>
+            </div>
+          </CreateTimeEntry.Form>
+        </Card>
+        <table class="grow table-fixed divide-y divide-neutral-300 whitespace-nowrap">
           <thead>
             <tr>
               <th scope="col" class="text-left text-sm font-semibold text-neutral-900 sm:pl-0">
@@ -92,7 +126,7 @@ const ListEntrys: VoidComponent = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </Page>
   );
 };
 
