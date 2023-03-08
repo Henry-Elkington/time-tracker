@@ -17,8 +17,23 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    password   String
+    password String
+
     TimeEntrys TimeEntry[]
+
+    ProjectsEmployer Project[] @relation("employer")
+    ProjectsEmployee Project[] @relation("employee")
+}
+
+model Project {
+    id String @id @default(uuid())
+
+    name        String
+    discription String
+
+    Employers User[]      @relation("employer")
+    Employees User[]      @relation("employee")
+    TimeEntry TimeEntry[]
 }
 
 model TimeEntry {
@@ -32,4 +47,7 @@ model TimeEntry {
 
     User   User?   @relation(fields: [userId], references: [id])
     userId String?
+
+    Project   Project? @relation(fields: [projectId], references: [id])
+    projectId String?
 }
