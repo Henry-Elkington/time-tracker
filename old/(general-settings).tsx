@@ -13,14 +13,14 @@ import type { MainLayoutRouteDataType } from "~/routes/(main)";
 
 /* Data Fetching
   ============================================ */
-export const routeData = ({ data }: RouteDataArgs<MainLayoutRouteDataType>) => {
+export function routeData({ data }: RouteDataArgs<MainLayoutRouteDataType>) {
   return data;
-};
+}
 
 /* Frontend
   ============================================ */
 
-const Settings: VoidComponent = () => {
+export default function Settings(): VoidComponent {
   const { user } = useRouteData<typeof routeData>();
   const [UpdateNamesAction, UpdateNames] = createServerAction$(UpdateNamesFn);
   const [UpdateEmailAction, UpdateEmail] = createServerAction$(UpdateEmailFn);
@@ -162,9 +162,7 @@ const Settings: VoidComponent = () => {
       </div>
     </Page>
   );
-};
-
-export default Settings;
+}
 
 /* Actions
   ============================================ */

@@ -11,8 +11,12 @@ import { Page } from "~/frontend/components";
 /* Frontend
   ============================================ */
 
-const NotFoundPage: VoidComponent = () => {
-  return <Page title="404: Page Not Found"></Page>;
+const SettingsLayout: VoidComponent = () => {
+  return (
+    <Page title="Settings">
+      <Outlet />
+    </Page>
+  );
 };
 
-export default NotFoundPage;
+export default SettingsLayout;

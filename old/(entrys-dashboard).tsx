@@ -28,6 +28,54 @@ export const routeData = (RouteDataArgs: RouteDataArgs<MainLayoutRouteDataType>)
   return { user: RouteDataArgs.data.user, timeEntrys: timeEntrys };
 };
 
+/* Actions
+  ============================================ */
+
+async function createTimeEntryFn(formData: FormData) {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  const data = await validateFields(
+    formData,
+    z.object({
+      userId: z.string(),
+      name: z.string().min(5),
+      discription: z.string(),
+      startTimeLocal: z.coerce.date(),
+      endTimeLocal: z.coerce.date(),
+    })
+  );
+
+  await db.timeEntry.create({
+    data: {
+      name: data.name,
+      discription: data.discription,
+      startTime: data.startTimeLocal,
+      endTime: data.endTimeLocal,
+      userId: data.userId,
+    },
+  });
+
+  return redirect("/entrys");
+}
+async function deleteTimeEntryFn(formData: FormData) {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  const data = await validateFields(
+    formData,
+    z.object({
+      id: z.string(),
+    })
+  );
+
+  const deletedTimeEntry = await db.timeEntry.delete({
+    where: {
+      id: data.id,
+    },
+  });
+
+  return redirect("/entrys");
+}
+
 /* Frontend
   ============================================ */
 
@@ -137,51 +185,3 @@ const ListEntrys: VoidComponent = () => {
 };
 
 export default ListEntrys;
-
-/* Actions
-  ============================================ */
-
-async function createTimeEntryFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      userId: z.string(),
-      name: z.string().min(5),
-      discription: z.string(),
-      startTimeLocal: z.coerce.date(),
-      endTimeLocal: z.coerce.date(),
-    })
-  );
-
-  await db.timeEntry.create({
-    data: {
-      name: data.name,
-      discription: data.discription,
-      startTime: data.startTimeLocal,
-      endTime: data.endTimeLocal,
-      userId: data.userId,
-    },
-  });
-
-  return redirect("/entrys");
-}
-async function deleteTimeEntryFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      id: z.string(),
-    })
-  );
-
-  const deletedTimeEntry = await db.timeEntry.delete({
-    where: {
-      id: data.id,
-    },
-  });
-
-  return redirect("/entrys");
-}
