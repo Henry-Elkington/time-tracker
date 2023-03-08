@@ -48,21 +48,21 @@ const MainLayout: VoidComponent = () => {
               Home
             </A>
             <A href="/entrys" class="flex items-center justify-center px-5" activeClass="bg-neutral-200">
-              Entry
+              Entrys
             </A>
-            <A href="/billing" class="flex items-center justify-center px-5" activeClass="bg-neutral-200">
-              Billing
+            <A href="/projects" class="flex items-center justify-center px-5" activeClass="bg-neutral-200">
+              Projects
             </A>
           </div>
           <div class="flex items-stretch divide-x divide-neutral-300 border-l border-r border-neutral-300">
             <div class="relative flex items-stretch">
               <button
-                class="flex items-center justify-center px-5"
+                class="flex items-center justify-center px-3 lg:px-5"
                 classList={{ "bg-neutral-200": dropDownOpen() }}
                 onClick={() => setDropDownOpen(!dropDownOpen())}
               >
-                {user()?.firstName + " " + user()?.lastName}
-                <img src="/default-user.png" class="ml-3 h-7 w-7 rounded-full" />
+                <p class="mr-3 hidden lg:block">{user()?.firstName + " " + user()?.lastName}</p>
+                <img src="/default-user.png" class=" h-7 w-7 rounded-full" />
               </button>
               <Show when={dropDownOpen()}>
                 <Card class="absolute top-full -right-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
@@ -83,7 +83,7 @@ const MainLayout: VoidComponent = () => {
           </div>
         </nav>
       </div>
-      <div class="overflow-x-hidden overflow-y-scroll">
+      <div class="touch-pan-y overflow-x-hidden overflow-y-scroll">
         <main class="container m-auto">
           <Outlet />
         </main>

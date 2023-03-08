@@ -97,8 +97,8 @@ export const Page: ParentComponent<{
   return (
     <>
       <h1 class="p-4 py-5 text-4xl">{props.title}</h1>
-      <hr class="border-neutral-300 py-3" />
-      {props.children}
+      <hr class="border-neutral-300" />
+      <div class="p-4">{props.children}</div>
     </>
   );
 };

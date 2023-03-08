@@ -9,7 +9,7 @@ import { Page } from "~/frontend/components";
 
 // Page Component
 const Profile: VoidComponent = () => {
-  return <Page title="Billing"></Page>;
+  return <Page title="Projects"></Page>;
 };
 
 export default Profile;

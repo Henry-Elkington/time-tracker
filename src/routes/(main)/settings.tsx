@@ -50,7 +50,7 @@ const Settings: VoidComponent = () => {
           <UpdateNames.Form>
             <div class="flex flex-col gap-3 p-5">
               <h3 class="text-xl">Your Name</h3>
-              <div class="flex gap-3">
+              <div class="flex flex-col gap-3 lg:flex-row">
                 <input type="hidden" name="id" value={user()?.id} />
                 <InputComponent
                   value={user()?.firstName}
@@ -130,7 +130,7 @@ const Settings: VoidComponent = () => {
           <UpdatePassword.Form>
             <div class="flex flex-col gap-3 p-5">
               <h3 class="text-xl">Your Password</h3>
-              <div class="flex gap-3">
+              <div class="flex flex-col gap-3 lg:flex-row">
                 <input type="hidden" name="id" value={user()?.id} />
                 <InputComponent
                   value=""

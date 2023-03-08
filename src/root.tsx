@@ -5,7 +5,7 @@ import { Body, ErrorBoundary, FileRoutes, Head, Html, Meta, Routes, Scripts, Tit
 
 export default function Root() {
   return (
-    <Html lang="en" class="box-border h-full bg-white text-neutral-600">
+    <Html lang="en" class="box-border h-full touch-none bg-white text-neutral-600">
       <Head>
         <Title>Create JD App</Title>
         <Meta charset="utf-8" />
