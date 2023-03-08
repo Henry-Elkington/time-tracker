@@ -1,23 +1,22 @@
 import { A, Outlet, useRouteData } from "solid-start";
-import { type ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { Component, createSignal, JSX, Show, type VoidComponent } from "solid-js";
+import { type ServerFunctionEvent, createServerAction$, createServerData$ } from "solid-start/server";
+import type { Component, JSX } from "solid-js";
+import { createSignal, Show, type VoidComponent } from "solid-js";
 
-import { getUser, logout } from "~/backend/session";
+import { getSession, deleteSession } from "~/backend/session";
 import { Card } from "~/frontend/components";
+import { db } from "~/backend";
 
 /* Data Fetching
   ============================================ */
 
 export type MainLayoutRouteDataType = typeof routeData;
+
 export const routeData = () => {
   const user = createServerData$(async (_, { request }) => {
-    const user = await getUser(request);
+    const userId = await getSession(request);
 
-    if (!user) {
-      throw redirect("/login");
-    }
-
-    return user;
+    return db.user.findUnique({ where: { id: userId } });
   });
 
   return { user: user };
@@ -26,7 +25,7 @@ export const routeData = () => {
 /* Actions
   ============================================ */
 
-const logoutFn = (_: void, { request }: ServerFunctionEvent) => logout(request);
+const logoutFn = (_: void, { request }: ServerFunctionEvent) => deleteSession(request);
 
 /* Frontend
   ============================================ */

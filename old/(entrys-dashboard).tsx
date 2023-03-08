@@ -6,7 +6,7 @@ import { For, Show, type VoidComponent } from "solid-js";
 import { validateFields } from "~/backend/utils";
 import { InputComponent, Page, Button, Card, ErrorLabel } from "~/frontend/components";
 import type { MainLayoutRouteDataType } from "../(main)";
-import { getUserId } from "~/backend/session";
+import { getSession } from "~/backend/session";
 
 /* Data Fetching
   ============================================ */
@@ -14,7 +14,7 @@ import { getUserId } from "~/backend/session";
 export const routeData = (RouteDataArgs: RouteDataArgs<MainLayoutRouteDataType>) => {
   const timeEntrys = createServerData$(
     async (_, { request }) => {
-      const userId = await getUserId(request);
+      const userId = await getSession(request);
       const entrys = await db.timeEntry.findMany({ where: { userId: userId } });
       return entrys.map((entry) => ({
         id: entry.id,

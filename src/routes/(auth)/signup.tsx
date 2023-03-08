@@ -1,10 +1,11 @@
-import { db } from "~/backend";
 import { z } from "zod";
-import { A, FormError, useSearchParams } from "solid-start";
-import { createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { A, FormError } from "solid-start";
+import { createServerAction$, createServerData$ } from "solid-start/server";
 import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
-import { createUserSession, getUser, register } from "~/backend/session";
+
+import { db } from "~/backend";
+import { createSession, getLackOfSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
 import { InputComponent, Button, Card, ErrorLabel, Input } from "~/frontend/components";
 
@@ -13,21 +14,51 @@ import { InputComponent, Button, Card, ErrorLabel, Input } from "~/frontend/comp
 
 export const routeData = () => {
   return createServerData$(async (_, { request }) => {
-    if (await getUser(request)) {
-      throw redirect("/entrys");
-    }
-    return {};
+    const userid = await getLackOfSession(request);
+    return userid;
   });
 };
+
+/* Actions
+  ============================================ */
+
+async function signupFn(formData: FormData) {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  const data = await validateFields(
+    formData,
+    z.object({
+      email: z.string().email(),
+      firstName: z.string(),
+      lastName: z.string(),
+      password: z.string(),
+    })
+  );
+  const user = await db.user.findUnique({ where: { email: data.email } });
+  // const fields = Object.fromEntries(formData);
+  if (user) {
+    throw new FormError(`User with email ${data.email} already exists`); //, {fields,});
+  }
+
+  const newUser = await db.user.create({
+    data: {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
+    },
+  });
+
+  return createSession(`${newUser.id}`); // data.redirectTo ?? "/"
+}
 
 /* Frontend
   ============================================ */
 
-// Page Component
 const Signup: VoidComponent = () => {
-  const data = useRouteData<typeof routeData>();
-  const use = data();
-  const [searchParams] = useSearchParams();
+  const userId = useRouteData<typeof routeData>();
+  const use = userId();
+
   const [SignupAction, Signup] = createServerAction$(signupFn);
 
   return (
@@ -35,7 +66,6 @@ const Signup: VoidComponent = () => {
       <Card class="flex w-96 flex-col gap-4 p-5">
         <Signup.Form class="flex flex-col gap-3">
           <h1 class="text-center font-semibold">Login</h1>
-          <input name="redirectTo" type="hidden" value="" />
           <InputComponent
             name="email"
             type="email"
@@ -92,45 +122,4 @@ const Signup: VoidComponent = () => {
   );
 };
 
-// {[
-//   { label: "Email", props: { name: "email", type: "email" } },
-//   { label: "First Name", props: { name: "firstName", type: "text" } },
-//   { label: "Last Name", props: { name: "lastName", type: "text" } },
-//   { label: "Password", props: { name: "password", type: "password" } },
-// ]}
-
 export default Signup;
-
-/* Actions
-  ============================================ */
-
-async function signupFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      redirectTo: z.string(),
-      email: z.string().email(),
-      firstName: z.string(),
-      lastName: z.string(),
-      password: z.string(),
-    })
-  );
-
-  const fields = Object.fromEntries(formData);
-  const emailUserExists = await db.user.findUnique({ where: { email: data.email } });
-  if (emailUserExists) {
-    throw new FormError(`User with email ${data.email} already exists`, { fields });
-  }
-  const usernameUserExists = await db.user.findUnique({ where: { email: data.email } });
-  if (usernameUserExists) {
-    throw new FormError(`User with username ${data.email} already exists`, { fields });
-  }
-  const user = await register(data);
-  if (!user) {
-    throw new FormError(`Something went wrong trying to create a new user.`, { fields });
-  }
-
-  return createUserSession(`${user.id}`, data.redirectTo ?? "/");
-}

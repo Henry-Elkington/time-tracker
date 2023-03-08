@@ -1,31 +1,59 @@
 import { z } from "zod";
 import { A, FormError } from "solid-start";
-import { createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { createServerAction$, createServerData$ } from "solid-start/server";
 import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
-import { createUserSession, getUser, login } from "~/backend/session";
+
+import { createSession, getLackOfSession } from "~/backend/session";
 import { InputComponent, Card, ErrorLabel, Input, Button } from "~/frontend/components";
 import { validateFields } from "~/backend/utils";
+import { db } from "~/backend";
 
 /* Data Fetching
   ============================================ */
 
 export const routeData = () => {
   return createServerData$(async (_, { request }) => {
-    if (await getUser(request)) {
-      throw redirect("/entrys");
-    }
-    return {};
+    const userid = await getLackOfSession(request);
+    return userid;
   });
 };
+
+/* Actions
+  ============================================ */
+
+async function loginFn(formData: FormData) {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  const data = await validateFields(
+    formData,
+    z.object({
+      redirectTo: z.string(),
+      email: z.string().email(),
+      password: z.string(),
+    })
+  );
+
+  const user = await db.user.findUnique({ where: { email: data.email } });
+
+  if (!user) {
+    throw new FormError(`Email/Password combination is incorrect`); //, {fields,});
+  }
+
+  if (user.password !== data.password) {
+    throw new FormError(`Email/Password combination is incorrect`); //, {fields,});
+  }
+
+  return createSession(`${user.id}`); // data.redirectTo ?? "/"
+}
 
 /* Frontend
   ============================================ */
 
-// Page Component
 const Login: VoidComponent = () => {
-  const data = useRouteData<typeof routeData>();
-  const use = data();
+  const userId = useRouteData<typeof routeData>();
+  const use = userId();
+
   const [LoginAction, Login] = createServerAction$(loginFn);
 
   return (
@@ -33,7 +61,6 @@ const Login: VoidComponent = () => {
       <Card class="flex w-96 flex-col gap-4 p-5">
         <Login.Form class="flex flex-col gap-3">
           <h1 class="text-center font-semibold">Login</h1>
-          <input name="redirectTo" type="hidden" value="" />
           <InputComponent
             name="email"
             type="email"
@@ -75,26 +102,3 @@ const Login: VoidComponent = () => {
 };
 
 export default Login;
-
-/* Actions
-  ============================================ */
-
-async function loginFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
-
-  const data = await validateFields(
-    formData,
-    z.object({
-      redirectTo: z.string(),
-      email: z.string().email(),
-      password: z.string(),
-    })
-  );
-
-  const user = await login(data);
-  if (!user) {
-    throw new FormError(`Email/Password combination is incorrect`); //, {fields,});
-  }
-
-  return createUserSession(`${user.id}`, data.redirectTo ?? "/");
-}

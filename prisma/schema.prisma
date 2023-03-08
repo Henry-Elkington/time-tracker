@@ -25,17 +25,6 @@ model User {
     ProjectsEmployee Project[] @relation("employee")
 }
 
-model Project {
-    id String @id @default(uuid())
-
-    name        String
-    discription String
-
-    Employers User[]      @relation("employer")
-    Employees User[]      @relation("employee")
-    TimeEntry TimeEntry[]
-}
-
 model TimeEntry {
     id String @id @default(uuid())
 
@@ -50,4 +39,15 @@ model TimeEntry {
 
     Project   Project? @relation(fields: [projectId], references: [id])
     projectId String?
+}
+
+model Project {
+    id String @id @default(uuid())
+
+    name        String
+    discription String
+
+    Employers User[]      @relation("employer")
+    Employees User[]      @relation("employee")
+    TimeEntry TimeEntry[]
 }
