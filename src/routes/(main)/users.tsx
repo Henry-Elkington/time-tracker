@@ -1,6 +1,8 @@
+import { Icon } from "solid-heroicons";
+import { magnifyingGlass } from "solid-heroicons/solid";
 import type { VoidComponent } from "solid-js";
 import { A, Outlet } from "solid-start";
-import { buttonStyles, Page } from "~/frontend/components";
+import { Button, buttonStyles, Input, Page } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -15,12 +17,16 @@ const UsersLayout: VoidComponent = () => {
   return (
     <Page
       title="Users"
-      titleLink="/users"
       right={
         <div class="flex items-center justify-center gap-5">
-          <A href="/users/search" class={buttonStyles}>
-            Search
-          </A>
+          <Input
+            type="search"
+            left={
+              <Button class="rounded-l-none border-l-0">
+                <Icon path={magnifyingGlass} class="h-4" />
+              </Button>
+            }
+          />
         </div>
       }
     >

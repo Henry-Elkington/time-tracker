@@ -1,8 +1,7 @@
+import type { VoidComponent } from "solid-js";
 import { Icon } from "solid-heroicons";
 import { magnifyingGlass } from "solid-heroicons/solid";
-import type { VoidComponent } from "solid-js";
 import { A, Outlet } from "solid-start";
-import { twMerge } from "tailwind-merge";
 import { Button, buttonStyles, Input, Page } from "~/frontend/components";
 
 /* Data Fetching
@@ -18,9 +17,8 @@ const EntrysLayout: VoidComponent = () => {
   return (
     <Page
       title="Entrys"
-      titleLink="/entrys"
       right={
-        <div class="flex items-center justify-center gap-5">
+        <div class="flex items-center justify-center gap-2">
           <Input
             type="search"
             left={

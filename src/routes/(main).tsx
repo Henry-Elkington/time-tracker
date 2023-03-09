@@ -76,6 +76,7 @@ const DropDownLink: Component<{ href: string; text: string }> = (props) => {
     </A>
   );
 };
+
 const DropDownButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
   return <button class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200" {...props} />;
 };

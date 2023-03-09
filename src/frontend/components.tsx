@@ -1,4 +1,4 @@
-import type { Component, ParentComponent, JSX } from "solid-js";
+import { Component, ParentComponent, JSX, For } from "solid-js";
 import { splitProps } from "solid-js";
 import { A } from "solid-start";
 import { twMerge } from "tailwind-merge";
@@ -97,24 +97,31 @@ export const InputComponent: Component<
   );
 };
 
+/* NavBar
+  ============================================ */
+
 /* Page
   ============================================ */
 
+const PageTab: Component<{ href: string; title: string }> = (props) => {
+  return (
+    <A href={props.href} end class="border-b border-neutral-300 p-2" activeClass="border-neutral-600 border-b-2">
+      {props.title}
+    </A>
+  );
+};
+
 export const Page: ParentComponent<{
   title: string;
-  titleLink: string;
-  right: JSX.Element;
+  right?: JSX.Element;
 }> = (props) => {
   return (
     <>
-      <div class="flex justify-between gap-10 p-4 py-5">
-        <A href={props.titleLink} class="text-4xl">
-          {props.title}
-        </A>
+      <nav class="mb-2 flex items-center justify-between border-b border-neutral-300">
+        <h1 class="p-2 text-2xl">{props.title}</h1>
         {props.right}
-      </div>
-      <hr class="border-neutral-300" />
-      <div class="p-4">{props.children}</div>
+      </nav>
+      {props.children}
     </>
   );
 };

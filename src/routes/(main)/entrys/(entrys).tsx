@@ -1,5 +1,6 @@
+import { A, useRouteData } from "@solidjs/router";
 import { For, type VoidComponent } from "solid-js";
-import { A, useRouteData } from "solid-start";
+import { Outlet } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
@@ -29,24 +30,29 @@ export const routeData = () => {
 /* Frontend
   ============================================ */
 
-const EntrysPage: VoidComponent = () => {
+const entrysPage: VoidComponent = () => {
   const { timeEntrys } = useRouteData<typeof routeData>();
 
   return (
-    <div class="m-auto max-w-3xl divide-y divide-neutral-300 border">
-      <For each={timeEntrys()}>
-        {(entry) => (
-          <A href={"/entrys/id/" + entry.id} class="flex justify-between p-3">
-            <p>{entry.name}</p>
-            <p>{entry.discription}</p>
-            <p>
-              {Math.floor(entry.lenth / 60 / 60 / 1000)}h - {Math.floor(entry.lenth / 60 / 1000) % 60}m
-            </p>
-          </A>
-        )}
-      </For>
+    <div class="flex">
+      <div class="grow">
+        <For each={timeEntrys()}>
+          {(entry) => (
+            <A href={"/entrys/id/" + entry.id}>
+              <Card>
+                <p>{entry.name}</p>
+                <p>{entry.discription}</p>
+                <p>
+                  {Math.floor(entry.lenth / 60 / 60 / 1000)}h - {Math.floor(entry.lenth / 60 / 1000) % 60}m
+                </p>
+              </Card>
+            </A>
+          )}
+        </For>
+      </div>
+      <Outlet />
     </div>
   );
 };
 
-export default EntrysPage;
+export default entrysPage;

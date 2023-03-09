@@ -35,7 +35,7 @@ async function createTimeEntryFn(formData: FormData, { request }: { request: Req
     },
   });
 
-  return redirect("/entrys/id/" + newEntry.id);
+  return redirect("/entrys/new"); // + newEntry.id
 }
 
 /* Frontend
@@ -45,7 +45,7 @@ const NewEntryPage: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <div class="m-auto max-w-3xl">
+    <div class="basis-1/2">
       <CreateTimeEntry.Form>
         <InputComponent
           name="name"

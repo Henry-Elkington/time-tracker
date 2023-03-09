@@ -13,7 +13,7 @@ import { Page } from "~/frontend/components";
 
 const HomePage: VoidComponent = () => {
   return (
-    <Page title="Home" titleLink="/" right={<></>}>
+    <Page title="Home" right={<></>}>
       home page
     </Page>
   );
