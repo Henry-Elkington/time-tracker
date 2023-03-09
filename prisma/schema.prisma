@@ -22,6 +22,7 @@ model User {
 
     ProjectsEmployer Project[] @relation("employer")
     ProjectsEmployee Project[] @relation("employee")
+    Project          Project[]
 }
 
 model TimeEntry {
@@ -49,6 +50,9 @@ model Project {
 
     name        String
     discription String
+
+    Admin   User?   @relation(fields: [adminId], references: [id])
+    adminId String?
 
     Employers User[] @relation("employer")
     Employees User[] @relation("employee")

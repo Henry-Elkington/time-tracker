@@ -33,17 +33,23 @@ export const Button: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement> & { l
 /* Input
   ============================================ */
 
-export const Input: Component<JSX.InputHTMLAttributes<HTMLInputElement> & { invalid: boolean }> = (props) => {
-  const [customProps, elementProps] = splitProps(props, ["class", "invalid"]);
+export const Input: Component<JSX.InputHTMLAttributes<HTMLInputElement> & { invalid?: boolean; left?: JSX.Element }> = (
+  props
+) => {
+  const [customProps, elementProps] = splitProps(props, ["class", "invalid", "left"]);
   return (
-    <input
-      class={twMerge(
-        "m-0 rounded-sm border border-neutral-300 bg-white py-0.5 px-2 outline-none focus-within:border-neutral-300 hover:border-neutral-400 hover:read-only:border-neutral-300 focus:ring-2 focus:ring-blue-200 read-only:focus:ring-0 read-only:focus-visible:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-400 hover:disabled:border-neutral-300",
-        customProps.invalid ? "border-red-300 bg-red-50 focus:ring-red-200 focus-visible:border-red-400" : "", //focus:ring-red-400 focus-visible:border-red-400 border-red-300 text-red-600
-        customProps.class
-      )}
-      {...elementProps}
-    />
+    <div class="flex items-stretch">
+      <input
+        class={twMerge(
+          "m-0 rounded-sm border border-neutral-300 bg-white py-0.5 px-2 outline-none focus-within:border-neutral-300 hover:border-neutral-400 hover:read-only:border-neutral-300 focus:ring-2 focus:ring-blue-200 read-only:focus:ring-0 read-only:focus-visible:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-400 hover:disabled:border-neutral-300",
+          customProps.left ? "rounded-r-none" : "",
+          customProps.invalid ? "border-red-300 bg-red-50 focus:ring-red-200 focus-visible:border-red-400" : "", //focus:ring-red-400 focus-visible:border-red-400 border-red-300 text-red-600
+          customProps.class
+        )}
+        {...elementProps}
+      />
+      {customProps.left}
+    </div>
   );
 };
 
@@ -101,7 +107,7 @@ export const Page: ParentComponent<{
 }> = (props) => {
   return (
     <>
-      <div class="flex gap-10 p-4 py-5">
+      <div class="flex justify-between gap-10 p-4 py-5">
         <A href={props.titleLink} class="text-4xl">
           {props.title}
         </A>

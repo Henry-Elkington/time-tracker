@@ -1,5 +1,5 @@
 import { A, Outlet, useRouteData } from "solid-start";
-import { type ServerFunctionEvent, createServerAction$, createServerData$ } from "solid-start/server";
+import { type ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import type { Component, JSX } from "solid-js";
 import { createSignal, Show, type VoidComponent } from "solid-js";
 
@@ -11,7 +11,6 @@ import { db } from "~/backend";
   ============================================ */
 
 export type MainLayoutRouteDataType = typeof routeData;
-
 export const routeData = () => {
   const user = createServerData$(async (_, { request }) => {
     const userId = await getSession(request);
@@ -25,7 +24,11 @@ export const routeData = () => {
 /* Actions
   ============================================ */
 
-const logoutFn = (_: void, { request }: ServerFunctionEvent) => deleteSession(request);
+const logoutFn = async (_: void, { request }: ServerFunctionEvent) => {
+  await new Promise((res) => setTimeout(res, 1000));
+
+  return await deleteSession(request);
+};
 
 /* Frontend
   ============================================ */
@@ -42,7 +45,6 @@ const NavBar: Component<{ left: JSX.Element; right: JSX.Element }> = (props) => 
     </nav>
   );
 };
-
 const NavLink: Component<{ name: string; href: string; end: boolean }> = (props) => {
   return (
     <A href={props.href} class="flex items-center justify-center px-5" activeClass="bg-neutral-200" end={props.end}>
@@ -50,9 +52,37 @@ const NavLink: Component<{ name: string; href: string; end: boolean }> = (props)
     </A>
   );
 };
+const NavButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement> & { open: boolean }> = (props) => {
+  return (
+    <button
+      class="flex h-full w-full items-center justify-center px-5"
+      classList={{ "bg-neutral-200": props.open }}
+      {...props}
+    />
+  );
+};
+const DropDown: Component<{ target: JSX.Element; dropDown: JSX.Element; open: boolean }> = (props) => {
+  return (
+    <div class="relative">
+      {props.target}
+      <Show when={props.open}>{props.dropDown}</Show>
+    </div>
+  );
+};
+const DropDownLink: Component<{ href: string; text: string }> = (props) => {
+  return (
+    <A href={props.href} class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200">
+      {props.text}
+    </A>
+  );
+};
+const DropDownButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
+  return <button class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200" {...props} />;
+};
 
 const MainLayout: VoidComponent = () => {
   const { user } = useRouteData<typeof routeData>();
+
   const [LogoutAction, Logout] = createServerAction$(logoutFn);
 
   const [dropDownOpen, setDropDownOpen] = createSignal(false);
@@ -65,39 +95,31 @@ const MainLayout: VoidComponent = () => {
             <>
               <NavLink end={true} href="/" name="Home" />
               <NavLink end={false} href="/entrys" name="Entrys" />
-              <NavLink end={false} href="/invoices" name="Invoices" />
               <NavLink end={false} href="/projects" name="Projects" />
               <NavLink end={false} href="/users" name="Users" />
             </>
           }
           right={
-            <>
-              <div class="relative flex items-stretch">
-                <button
-                  class="flex items-center justify-center px-3 lg:px-5"
-                  classList={{ "bg-neutral-200": dropDownOpen() }}
-                  onClick={() => setDropDownOpen(!dropDownOpen())}
-                >
-                  <p class="mr-3 hidden lg:block">{user()?.firstName + " " + user()?.lastName}</p>
-                  <img src="/default-user.png" class=" h-7 w-7 rounded-full" />
-                </button>
-                <Show when={dropDownOpen()}>
-                  <Card class="absolute top-full -right-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
-                    <A href="/settings" class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200">
-                      Settings
-                    </A>
-                    <button
-                      onClick={() => Logout()}
-                      name="logout"
-                      type="submit"
-                      class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200"
-                    >
-                      Logout
-                    </button>
-                  </Card>
-                </Show>
-              </div>
-            </>
+            <DropDown
+              target={
+                <NavButton open={dropDownOpen()} onClick={() => setDropDownOpen((s) => !s)}>
+                  <p class="mr-3">
+                    {user()?.firstName} {user()?.lastName}
+                  </p>
+                  <img src="/default-user.png" class="h-7 w-7 rounded-full" />
+                </NavButton>
+              }
+              dropDown={
+                <Card class="absolute top-full -right-[1px] z-10 flex flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
+                  <DropDownLink href="settings" text="Settings" />
+                  <DropDownButton onClick={() => Logout()} name="logout" type="submit">
+                    Logout
+                  </DropDownButton>
+                  <pre>{JSON.stringify(LogoutAction)}</pre>
+                </Card>
+              }
+              open={dropDownOpen()}
+            />
           }
         />
       </div>

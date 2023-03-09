@@ -51,7 +51,7 @@ const NewEntryPage: VoidComponent = () => {
           name="name"
           type="text"
           errorMessage={CreateTimeEntryAction.error?.fieldErrors?.name}
-          invalid={CreateTimeEntryAction.error?.fieldErrors?.startTimeLocal}
+          invalid={CreateTimeEntryAction.error?.fieldErrors?.name}
           lableText="Name:"
           class="w-full"
         />
@@ -59,7 +59,7 @@ const NewEntryPage: VoidComponent = () => {
           name="discription"
           type="text"
           errorMessage={CreateTimeEntryAction.error?.fieldErrors?.discription}
-          invalid={CreateTimeEntryAction.error?.fieldErrors?.startTimeLocal}
+          invalid={CreateTimeEntryAction.error?.fieldErrors?.discription}
           lableText="Discription:"
           class="w-full"
         />
