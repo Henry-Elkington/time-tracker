@@ -28,7 +28,6 @@ async function loginFn(formData: FormData) {
   const data = await validateFields(
     formData,
     z.object({
-      redirectTo: z.string(),
       email: z.string().email(),
       password: z.string(),
     })
