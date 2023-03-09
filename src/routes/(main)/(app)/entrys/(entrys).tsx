@@ -33,17 +33,15 @@ const EntrysPage: VoidComponent = () => {
   const { timeEntrys } = useRouteData<typeof routeData>();
 
   return (
-    <div class="grid grid-cols-4">
+    <div class="m-auto max-w-3xl divide-y divide-neutral-300 border">
       <For each={timeEntrys()}>
         {(entry) => (
-          <A href={"/entrys/id/" + entry.id}>
-            <Card class="m-3 p-3">
-              <h3 class="text-xl">{entry.name}</h3>
-              <p>{entry.discription}</p>
-              <p>
-                {Math.floor(entry.lenth / 60 / 60 / 1000)}h - {Math.floor(entry.lenth / 60 / 1000) % 60}m
-              </p>
-            </Card>
+          <A href={"/entrys/id/" + entry.id} class="flex justify-between p-3">
+            <p>{entry.name}</p>
+            <p>{entry.discription}</p>
+            <p>
+              {Math.floor(entry.lenth / 60 / 60 / 1000)}h - {Math.floor(entry.lenth / 60 / 1000) % 60}m
+            </p>
           </A>
         )}
       </For>

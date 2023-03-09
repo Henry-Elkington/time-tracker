@@ -45,7 +45,7 @@ const NewEntryPage: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <div>
+    <div class="m-auto max-w-3xl">
       <CreateTimeEntry.Form>
         <InputComponent
           name="name"

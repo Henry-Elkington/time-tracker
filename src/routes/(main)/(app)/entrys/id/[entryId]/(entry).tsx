@@ -42,13 +42,15 @@ const EntryPage: VoidComponent = () => {
   return (
     <ErrorBoundary fallback={(e) => <div>404: entry not found</div>}>
       <Show when={timeEntry()}>
-        <Card class="m-3 p-3">
-          <h3 class="text-xl">{timeEntry()!.name}</h3>
-          <p>{timeEntry()!.discription}</p>
-          <p>
-            {Math.floor(timeEntry()!.lenth / 60 / 60 / 1000)}h - {Math.floor(timeEntry()!.lenth / 60 / 1000) % 60}m
-          </p>
-        </Card>
+        <div class="m-auto max-w-3xl border">
+          <div class="flex justify-between p-3">
+            <p>{timeEntry()!.name}</p>
+            <p>{timeEntry()!.discription}</p>
+            <p>
+              {Math.floor(timeEntry()!.lenth / 60 / 60 / 1000)}h - {Math.floor(timeEntry()!.lenth / 60 / 1000) % 60}m
+            </p>
+          </div>
+        </div>
       </Show>
     </ErrorBoundary>
   );
