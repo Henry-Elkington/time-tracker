@@ -43,9 +43,9 @@ const NavBar: Component<{ left: JSX.Element; right: JSX.Element }> = (props) => 
   );
 };
 
-const NavLink: Component<{ name: string; href: string }> = (props) => {
+const NavLink: Component<{ name: string; href: string; end: boolean }> = (props) => {
   return (
-    <A href={props.href} class="flex items-center justify-center px-5" activeClass="bg-neutral-200" end={true}>
+    <A href={props.href} class="flex items-center justify-center px-5" activeClass="bg-neutral-200" end={props.end}>
       {props.name}
     </A>
   );
@@ -63,11 +63,11 @@ const MainLayout: VoidComponent = () => {
         <NavBar
           left={
             <>
-              <NavLink href="/" name="Home" />
-              <NavLink href="/entrys" name="Entrys" />
-              <NavLink href="/invoices" name="Invoices" />
-              <NavLink href="/projects" name="Projects" />
-              <NavLink href="/users" name="Users" />
+              <NavLink end={true} href="/" name="Home" />
+              <NavLink end={false} href="/entrys" name="Entrys" />
+              <NavLink end={false} href="/invoices" name="Invoices" />
+              <NavLink end={false} href="/projects" name="Projects" />
+              <NavLink end={false} href="/users" name="Users" />
             </>
           }
           right={

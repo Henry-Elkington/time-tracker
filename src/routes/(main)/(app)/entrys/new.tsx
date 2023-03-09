@@ -13,14 +13,12 @@ import { validateFields } from "~/backend/utils";
   ============================================ */
 
 async function createTimeEntryFn(formData: FormData, { request }: { request: Request }) {
-  await new Promise((res) => setTimeout(res, 2000));
-
   const userId = await getSession(request);
 
   const data = await validateFields(
     formData,
     z.object({
-      name: z.string().min(5),
+      name: z.string(),
       discription: z.string(),
       startTimeLocal: z.coerce.date(),
       endTimeLocal: z.coerce.date(),

@@ -1,26 +1,29 @@
 import type { Component, ParentComponent, JSX } from "solid-js";
 import { splitProps } from "solid-js";
+import { A } from "solid-start";
 import { twMerge } from "tailwind-merge";
 
 /* Card
   ============================================ */
 
+export const cardStyles = "border border-neutral-300 bg-white";
+
 export const Card: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [customProps, elementProps] = splitProps(props, ["class"]);
-  return <div class={twMerge("border border-neutral-300 bg-white", customProps.class)} {...elementProps} />;
+  return <div class={twMerge(cardStyles, customProps.class)} {...elementProps} />;
 };
 
 /* Button
   ============================================ */
 
+export const buttonStyles =
+  "rounded-sm border border-neutral-300 bg-neutral-100 py-0.5 px-2 outline-none hover:border-neutral-400 focus:ring-2 focus:ring-blue-200 disabled:bg-neutral-200 disabled:text-neutral-400 disabled:hover:border-neutral-300";
+
 export const Button: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement> & { loading?: boolean }> = (props) => {
   const [customProps, elementProps] = splitProps(props, ["class", "children", "loading"]);
   return (
     <button
-      class={twMerge(
-        "rounded-sm border border-neutral-300 bg-neutral-100 py-0.5 px-2 outline-none hover:border-neutral-400 focus:ring-2 focus:ring-blue-200 disabled:bg-neutral-200 disabled:text-neutral-400 disabled:hover:border-neutral-300",
-        customProps.class
-      )}
+      class={twMerge(buttonStyles, customProps.class)}
       {...elementProps}
       children={customProps.loading ? "loading..." : customProps.children}
     />
@@ -93,10 +96,17 @@ export const InputComponent: Component<
 
 export const Page: ParentComponent<{
   title: string;
+  titleLink: string;
+  right: JSX.Element;
 }> = (props) => {
   return (
     <>
-      <h1 class="p-4 py-5 text-4xl">{props.title}</h1>
+      <div class="flex gap-10 p-4 py-5">
+        <A href={props.titleLink} class="text-4xl">
+          {props.title}
+        </A>
+        {props.right}
+      </div>
       <hr class="border-neutral-300" />
       <div class="p-4">{props.children}</div>
     </>

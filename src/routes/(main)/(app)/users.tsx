@@ -1,6 +1,6 @@
 import type { VoidComponent } from "solid-js";
-import { Outlet } from "solid-start";
-import { Page } from "~/frontend/components";
+import { A, Outlet } from "solid-start";
+import { buttonStyles, Page } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -13,7 +13,17 @@ import { Page } from "~/frontend/components";
 
 const UsersLayout: VoidComponent = () => {
   return (
-    <Page title="Users">
+    <Page
+      title="Users"
+      titleLink="/users"
+      right={
+        <div class="flex items-center justify-center gap-5">
+          <A href="/users/search" class={buttonStyles}>
+            Search
+          </A>
+        </div>
+      }
+    >
       <Outlet />
     </Page>
   );

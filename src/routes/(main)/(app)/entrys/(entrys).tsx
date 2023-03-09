@@ -1,8 +1,9 @@
 import { For, type VoidComponent } from "solid-js";
-import { useRouteData } from "solid-start";
+import { A, useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
+import { Card } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -32,8 +33,20 @@ const EntrysPage: VoidComponent = () => {
   const { timeEntrys } = useRouteData<typeof routeData>();
 
   return (
-    <div>
-      <For each={timeEntrys()}>{(entry) => <pre>{JSON.stringify(entry)}</pre>}</For>
+    <div class="grid grid-cols-4">
+      <For each={timeEntrys()}>
+        {(entry) => (
+          <A href={"/entrys/id/" + entry.id}>
+            <Card class="m-3 p-3">
+              <h3 class="text-xl">{entry.name}</h3>
+              <p>{entry.discription}</p>
+              <p>
+                {Math.floor(entry.lenth / 60 / 60 / 1000)}h - {Math.floor(entry.lenth / 60 / 1000) % 60}m
+              </p>
+            </Card>
+          </A>
+        )}
+      </For>
     </div>
   );
 };

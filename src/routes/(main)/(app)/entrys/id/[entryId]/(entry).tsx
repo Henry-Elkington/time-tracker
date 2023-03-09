@@ -1,21 +1,23 @@
 import { EntryType } from "perf_hooks";
-import { For, type VoidComponent } from "solid-js";
-import { RouteDataArgs, useRouteData } from "solid-start";
-import { createServerData$ } from "solid-start/server";
+import { For, Show, type VoidComponent } from "solid-js";
+import { ErrorBoundary, RouteDataArgs, useRouteData } from "solid-start";
+import { HttpStatusCode, createServerData$ } from "solid-start/server";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
+import { Card } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
 
 export const routeData = ({ params }: RouteDataArgs) => {
-  console.log();
-
-  const timeEntrys = createServerData$(
+  const timeEntry = createServerData$(
     async ([id], { request }) => {
       const userId = await getSession(request);
-      const entry = await db.timeEntry.findUnique({ where: { id: id } });
-      if (entry === null) return new Error();
+
+      const entry = await db.timeEntry.findFirst({ where: { AND: { id: id, userId: userId } } });
+
+      if (!entry) throw new Error("entry not found");
+
       return {
         id: entry.id,
         name: entry.name,
@@ -26,7 +28,7 @@ export const routeData = ({ params }: RouteDataArgs) => {
     { key: [params.entryId] }
   );
 
-  return { timeEntrys: timeEntrys };
+  return { timeEntry: timeEntry };
 };
 
 /* Actions
@@ -36,8 +38,20 @@ export const routeData = ({ params }: RouteDataArgs) => {
   ============================================ */
 
 const EntryPage: VoidComponent = () => {
-  const { timeEntrys } = useRouteData<typeof routeData>();
-  return <div>{JSON.stringify(timeEntrys())}</div>;
+  const { timeEntry } = useRouteData<typeof routeData>();
+  return (
+    <ErrorBoundary fallback={(e) => <div>404: entry not found</div>}>
+      <Show when={timeEntry()}>
+        <Card class="m-3 p-3">
+          <h3 class="text-xl">{timeEntry()!.name}</h3>
+          <p>{timeEntry()!.discription}</p>
+          <p>
+            {Math.floor(timeEntry()!.lenth / 60 / 60 / 1000)}h - {Math.floor(timeEntry()!.lenth / 60 / 1000) % 60}m
+          </p>
+        </Card>
+      </Show>
+    </ErrorBoundary>
+  );
 };
 
 export default EntryPage;
