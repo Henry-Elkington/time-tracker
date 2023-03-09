@@ -13,7 +13,7 @@ import { Page } from "~/frontend/components";
 
 const SettingsLayout: VoidComponent = () => {
   return (
-    <Page title="Settings">
+    <Page title="Settings" titleLink="/settings" right={<></>}>
       <Outlet />
     </Page>
   );
