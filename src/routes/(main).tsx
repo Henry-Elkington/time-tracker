@@ -1,7 +1,7 @@
 import { A, Outlet, useRouteData } from "solid-start";
-import { type ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { type ServerFunctionEvent, createServerAction$, createServerData$ } from "solid-start/server";
 import type { Component, JSX } from "solid-js";
-import { createSignal, Show, type VoidComponent } from "solid-js";
+import { createSignal, type VoidComponent } from "solid-js";
 
 import { getSession, deleteSession } from "~/backend/session";
 import { Card, DropDown, DropDownButton, DropDownLink } from "~/frontend/components";
