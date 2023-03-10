@@ -1,11 +1,14 @@
-{ 
-  "name": "Time Tracker", 
-  "short_name": "TmTrkr", 
-  "start_url": "https://DomainName", 
-  "display": "standalone", 
-  "icons": [{ 
-    "src": "images/logo.png", 
-    "sizes": "512x512", 
-    "type": "image/png" 
-  }] 
+{
+  "name": "Time Tracker",
+  "short_name": "Time Tracker",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "orientation": "portrait",
+  "start_url": "https://time-tracker.henryelkington.com",
+  "display": "standalone",
+  "icons": [{
+    "src": "images/logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }]
 }
