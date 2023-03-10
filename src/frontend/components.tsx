@@ -1,4 +1,8 @@
-import { Component, ParentComponent, JSX, For } from "solid-js";
+import { Icon } from "solid-heroicons";
+import { bars_3 } from "solid-heroicons/solid";
+import type { Component, ParentComponent, JSX } from "solid-js";
+import { For, Show } from "solid-js";
+import { createSignal } from "solid-js";
 import { splitProps } from "solid-js";
 import { A } from "solid-start";
 import { twMerge } from "tailwind-merge";
@@ -97,31 +101,59 @@ export const InputComponent: Component<
   );
 };
 
-/* NavBar
+/* DropDown
   ============================================ */
+
+export const DropDown: Component<{ target: JSX.Element; dropDown: JSX.Element; open: boolean }> = (props) => {
+  return (
+    <div class="relative">
+      {props.target}
+      <Show when={props.open}>{props.dropDown}</Show>
+    </div>
+  );
+};
+export const DropDownLink: Component<{ href: string; text: string | JSX.Element }> = (props) => {
+  return (
+    <A href={props.href} class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200">
+      {props.text}
+    </A>
+  );
+};
+export const DropDownButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
+  return <button class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200" {...props} />;
+};
 
 /* Page
   ============================================ */
 
-const PageTab: Component<{ href: string; title: string }> = (props) => {
-  return (
-    <A href={props.href} end class="border-b border-neutral-300 p-2" activeClass="border-neutral-600 border-b-2">
-      {props.title}
-    </A>
-  );
-};
-
 export const Page: ParentComponent<{
   title: string;
-  right?: JSX.Element;
+  dropDownLinks: { text: string; href: string }[];
 }> = (props) => {
+  const [dropDownOpen, setDropDownOpen] = createSignal(false);
   return (
     <>
-      <nav class="mb-2 flex items-center justify-between border-b border-neutral-300">
-        <h1 class="p-2 text-2xl">{props.title}</h1>
-        {props.right}
+      <nav class="fixed top-0 right-0 left-0 flex h-14 items-center justify-between border-b border-neutral-300 bg-white p-3 px-4">
+        <h1 class="text-3xl">{props.title}</h1>
+        <DropDown
+          target={
+            <Button onClick={() => setDropDownOpen((s) => !s)} class="p-0.5">
+              <Icon path={bars_3} class="h-6 w-6" />
+            </Button>
+          }
+          dropDown={
+            <Card class="absolute top-full right-0 z-10 flex w-max flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
+              <For each={props.dropDownLinks}>
+                {(dropDownLink) => <DropDownLink href={dropDownLink.href} text={dropDownLink.text} />}
+              </For>
+            </Card>
+          }
+          open={dropDownOpen()}
+        />
       </nav>
-      {props.children}
+      <div class="touch-pan-y overflow-y-scroll p-3 px-4 pt-[calc(3.5rem_+_1rem)]  pb-[calc(4.5rem_+_1rem)]">
+        {props.children}
+      </div>
     </>
   );
 };

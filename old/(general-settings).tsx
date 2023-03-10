@@ -37,7 +37,7 @@ export default function Settings(): VoidComponent {
                 <p>Click the image to change to a different photo.</p>
               </div>
             </div>
-            <img src="/default-user.png" loading="lazy" class="h-16 w-16" decoding="async" />
+            <img src="/images/app/default-user.png" loading="lazy" class="h-16 w-16" decoding="async" />
           </div>
           <div class="flex items-baseline gap-3 border-t border-neutral-300 bg-neutral-50 p-3 pl-5">
             <p class="grow text-neutral-500">Your Avatar. This will be shown to other people.</p>

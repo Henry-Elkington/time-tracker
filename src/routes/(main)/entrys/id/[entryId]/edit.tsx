@@ -1,4 +1,5 @@
 import type { VoidComponent } from "solid-js";
+import { Page } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -10,7 +11,17 @@ import type { VoidComponent } from "solid-js";
   ============================================ */
 
 const EditEntryPage: VoidComponent = () => {
-  return <div>edit entry page</div>;
+  return (
+    <Page
+      title="Edit Entry"
+      dropDownLinks={[
+        { text: "All Entrys", href: "/entrys" },
+        { text: "New Entry", href: "/entrys/new" },
+      ]}
+    >
+      <div>hi</div>
+    </Page>
+  );
 };
 
 export default EditEntryPage;

@@ -1,5 +1,5 @@
 import { createServerAction$, redirect } from "solid-start/server";
-import { Button, ErrorLabel, InputComponent } from "~/frontend/components";
+import { Button, ErrorLabel, InputComponent, Page, buttonStyles } from "~/frontend/components";
 import { type VoidComponent } from "solid-js";
 import { z } from "zod";
 import { db } from "~/backend";
@@ -13,6 +13,8 @@ import { validateFields } from "~/backend/utils";
   ============================================ */
 
 async function createTimeEntryFn(formData: FormData, { request }: { request: Request }) {
+  await new Promise((res) => setTimeout(res, 2000));
+
   const userId = await getSession(request);
 
   const data = await validateFields(
@@ -35,7 +37,7 @@ async function createTimeEntryFn(formData: FormData, { request }: { request: Req
     },
   });
 
-  return redirect("/entrys/new"); // + newEntry.id
+  return redirect("/entrys/id/" + newEntry.id);
 }
 
 /* Frontend
@@ -45,7 +47,13 @@ const NewEntryPage: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <div class="basis-1/2">
+    <Page
+      title="New Entry"
+      dropDownLinks={[
+        { text: "All Entrys", href: "/entrys" },
+        { text: "New Entry", href: "/entrys/new" },
+      ]}
+    >
       <CreateTimeEntry.Form>
         <InputComponent
           name="name"
@@ -86,7 +94,7 @@ const NewEntryPage: VoidComponent = () => {
           <ErrorLabel>{CreateTimeEntryAction.error?.message}</ErrorLabel>
         </div>
       </CreateTimeEntry.Form>
-    </div>
+    </Page>
   );
 };
 
