@@ -16,9 +16,9 @@ export default function Root() {
         <Meta name="apple-mobile-web-app-capable" content="yes" />
         <Meta name="apple-mobile-web-app-status-bar-style" content="white" />
         <Meta name="apple-mobile-web-app-title" content="Notentool" />
-        <Link rel="manifest" href="/manifest.json" />
+        <Link rel="manifest" href="/meta/manifest.json" />
 
-        <Link rel="icon" href="/images/favicon.png" />
+        <Link rel="icon" href="/meta/favicon.png" />
       </Head>
       <Body class="">
         <Suspense>

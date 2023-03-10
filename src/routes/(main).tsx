@@ -80,7 +80,7 @@ const MainLayout: VoidComponent = () => {
             <DropDown
               target={
                 <NavButton open={dropDownOpen()} onClick={() => setDropDownOpen((s) => !s)}>
-                  <img src="/images/app/default-user.png" class="h-8 w-8 rounded-full" />
+                  <img src="/images/default-user.png" class="h-8 w-8 rounded-full" />
                 </NavButton>
               }
               dropDown={

@@ -7,7 +7,7 @@
   "start_url": "https://time-tracker.henryelkington.com",
   "display": "standalone",
   "icons": [{
-    "src": "images/logo.png",
+    "src": "/images/logo.png",
     "sizes": "512x512",
     "type": "image/png"
   }]
