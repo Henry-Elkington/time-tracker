@@ -1,34 +1,15 @@
 import { A, Outlet, useRouteData } from "solid-start";
-import { type ServerFunctionEvent, createServerAction$, createServerData$ } from "solid-start/server";
+import { type ServerFunctionEvent, createServerAction$ } from "solid-start/server";
 import type { Component, JSX } from "solid-js";
-import { createSignal, type VoidComponent } from "solid-js";
+import { type VoidComponent } from "solid-js";
 
-import { getSession, deleteSession } from "~/backend/session";
-import { Card, DropDown, DropDownButton, DropDownLink } from "~/frontend/components";
-import { db } from "~/backend";
+import { deleteSession } from "~/backend/session";
 
 /* Data Fetching
   ============================================ */
 
-export type MainLayoutRouteDataType = typeof routeData;
-export const routeData = () => {
-  const user = createServerData$(async (_, { request }) => {
-    const userId = await getSession(request);
-
-    return db.user.findUnique({ where: { id: userId } });
-  });
-
-  return { user: user };
-};
-
 /* Actions
   ============================================ */
-
-const logoutFn = async (_: void, { request }: ServerFunctionEvent) => {
-  await new Promise((res) => setTimeout(res, 1000));
-
-  return await deleteSession(request);
-};
 
 /* Frontend
   ============================================ */
@@ -54,17 +35,8 @@ const NavLink: Component<{ name: string; href: string; end: boolean }> = (props)
     </A>
   );
 };
-const NavButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement> & { open: boolean }> = (props) => {
-  return <button class="h-full w-max shrink-0 px-1 text-lg" classList={{ "bg-neutral-200": props.open }} {...props} />;
-};
 
 const MainLayout: VoidComponent = () => {
-  const { user } = useRouteData<typeof routeData>();
-
-  const [LogoutAction, Logout] = createServerAction$(logoutFn);
-
-  const [dropDownOpen, setDropDownOpen] = createSignal(false);
-
   return (
     <div class="static">
       <main class="container m-auto">
@@ -77,38 +49,12 @@ const MainLayout: VoidComponent = () => {
             <NavLink end={false} href="/entrys" name="Entrys" />
             <NavLink end={false} href="/projects" name="Projects" />
             <NavLink end={false} href="/users" name="Users" />
-            <DropDown
-              target={
-                <NavButton open={dropDownOpen()} onClick={() => setDropDownOpen((s) => !s)}>
-                  <img src="/images/default-user.png" class="h-8 w-8 rounded-full" />
-                </NavButton>
-              }
-              dropDown={
-                <Card class="absolute bottom-full -right-px z-10 flex flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
-                  <DropDownLink href="settings" text="Settings" />
-                  <DropDownButton onClick={() => Logout()} name="logout" type="submit">
-                    Logout
-                  </DropDownButton>
-                </Card>
-              }
-              open={dropDownOpen()}
-            />
+            <NavLink end={false} href="/profile" name="Profile" />
           </>
         }
       />
     </div>
   );
 };
-
-{
-  /* <DropDownLink
-href="settings"
-text={
-  <>
-    {user()?.firstName} + {user()?.lastName}
-  </>
-}
-/> */
-}
 
 export default MainLayout;

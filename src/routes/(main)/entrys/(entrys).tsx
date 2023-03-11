@@ -6,7 +6,7 @@ import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
-import { Card, Page } from "~/frontend/components";
+import { Button, Card, Page, buttonStyles } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -40,13 +40,14 @@ const entrysPage: VoidComponent = () => {
   return (
     <Page
       title="All Entrys"
-      dropDownLinks={[
-        { text: "All Entrys", href: "/entrys" },
-        { text: "New Entry", href: "/entrys/new" },
-      ]}
+      right={
+        <A href="/entrys/new" class={buttonStyles}>
+          New
+        </A>
+      }
     >
       <div class="flex flex-col gap-2 ">
-        <Suspense fallback="Loading ...">
+        <Suspense fallback="Loading...">
           <For each={timeEntrys()}>
             {(timeEntry) => (
               <A href={"/entrys/id/" + timeEntry.id}>

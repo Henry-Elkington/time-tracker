@@ -101,59 +101,20 @@ export const InputComponent: Component<
   );
 };
 
-/* DropDown
-  ============================================ */
-
-export const DropDown: Component<{ target: JSX.Element; dropDown: JSX.Element; open: boolean }> = (props) => {
-  return (
-    <div class="relative">
-      {props.target}
-      <Show when={props.open}>{props.dropDown}</Show>
-    </div>
-  );
-};
-export const DropDownLink: Component<{ href: string; text: string | JSX.Element }> = (props) => {
-  return (
-    <A href={props.href} class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200">
-      {props.text}
-    </A>
-  );
-};
-export const DropDownButton: Component<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
-  return <button class="flex items-center justify-end p-2 px-4 hover:bg-neutral-200" {...props} />;
-};
-
 /* Page
   ============================================ */
 
 export const Page: ParentComponent<{
   title: string;
-  dropDownLinks: { text: string; href: string }[];
+  right?: JSX.Element;
 }> = (props) => {
-  const [dropDownOpen, setDropDownOpen] = createSignal(false);
   return (
     <>
-      <nav class="fixed top-0 right-0 left-0 flex h-14 items-center justify-between border-b border-neutral-300 bg-white p-3 px-4">
+      <nav class="mx-4 flex items-center justify-between border-b border-neutral-300 bg-white py-3">
         <h1 class="text-3xl">{props.title}</h1>
-        <DropDown
-          target={
-            <Button onClick={() => setDropDownOpen((s) => !s)} class="p-0.5">
-              <Icon path={bars_3} class="h-6 w-6" />
-            </Button>
-          }
-          dropDown={
-            <Card class="absolute top-full right-0 z-10 flex w-max flex-col items-stretch divide-y divide-gray-300 bg-neutral-100 text-right">
-              <For each={props.dropDownLinks}>
-                {(dropDownLink) => <DropDownLink href={dropDownLink.href} text={dropDownLink.text} />}
-              </For>
-            </Card>
-          }
-          open={dropDownOpen()}
-        />
+        {props.right}
       </nav>
-      <div class="touch-pan-y overflow-y-scroll p-3 px-4 pt-[calc(3.5rem_+_1rem)]  pb-[calc(4.5rem_+_1rem)]">
-        {props.children}
-      </div>
+      <div class="p-3 px-4 pb-[calc(4.5rem_+_1rem)]">{props.children}</div>
     </>
   );
 };

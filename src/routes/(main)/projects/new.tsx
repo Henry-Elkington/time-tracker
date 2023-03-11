@@ -5,7 +5,7 @@ import { z } from "zod";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { Button, ErrorLabel, InputComponent, Label, buttonStyles } from "~/frontend/components";
+import { Button, ErrorLabel, InputComponent, Label, Page, buttonStyles } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -24,34 +24,23 @@ export const routeData = () => {
 async function createProjectFn(formData: FormData, { request }: { request: Request }) {
   const userId = await getSession(request);
 
-  for (const pair of formData.entries()) {
-    console.log(`${pair[0]}, ${pair[1]}, ${pair[1][1]}`);
-  }
+  const data = await validateFields(
+    formData,
+    z.object({
+      name: z.string(),
+      discription: z.string(),
+    })
+  );
 
-  // const data = await validateFields(
-  //   formData,
-  //   z.object({
-  //     name: z.string(),
-  //     discription: z.string(),
-  //   })
-  // );
+  const newProject = await db.project.create({
+    data: {
+      name: data.name,
+      discription: data.discription,
+      adminId: userId,
+    },
+  });
 
-  // console.log(data);
-
-  // const newProject = await db.project.create({
-  //   data: {
-  //     name: data.name,
-  //     discription: data.discription,
-  //     adminId: userId,
-  //     Employers: {
-  //       connect: {
-  //         id:
-  //       }
-  //     }
-  //   },
-  // });
-
-  // return redirect("/project/id/" + newProject.id);
+  return redirect("/project/id/" + newProject.id);
 }
 
 /* Frontend
@@ -63,7 +52,7 @@ const NewProjectPage: VoidComponent = () => {
   const [CreateProjectAction, CreateProject] = createServerAction$(createProjectFn);
 
   return (
-    <div class="m-auto max-w-3xl">
+    <Page title="New Project">
       <CreateProject.Form>
         <InputComponent
           name="name"
@@ -81,32 +70,6 @@ const NewProjectPage: VoidComponent = () => {
           lableText="discription:"
           class="w-full"
         />
-        <div>
-          <Label invalid={CreateProjectAction.error?.fieldErrors?.employers}>Employers:</Label>
-          <select name="employers" multiple class="w-full rounded-sm border-gray-300">
-            <For each={users()}>
-              {(user) => (
-                <option value={user.id}>
-                  {user.firstName} {user.lastName}
-                </option>
-              )}
-            </For>
-          </select>
-          <ErrorLabel>{CreateProjectAction.error?.fieldErrors?.employers}</ErrorLabel>
-        </div>
-        <div>
-          <Label invalid={CreateProjectAction.error?.fieldErrors?.employees}>Employees:</Label>
-          <select name="employees" multiple class="w-full rounded-sm border-gray-300">
-            <For each={users()}>
-              {(user) => (
-                <option value={user.id}>
-                  {user.firstName} {user.lastName}
-                </option>
-              )}
-            </For>
-          </select>
-          <ErrorLabel>{CreateProjectAction.error?.fieldErrors?.employees}</ErrorLabel>
-        </div>
         <div class="flex flex-col pt-2">
           <Button disabled={CreateProjectAction.pending} loading={CreateProjectAction.pending}>
             Create
@@ -114,7 +77,7 @@ const NewProjectPage: VoidComponent = () => {
           <ErrorLabel>{CreateProjectAction.error?.message}</ErrorLabel>
         </div>
       </CreateProject.Form>
-    </div>
+    </Page>
   );
 };
 

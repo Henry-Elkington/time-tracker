@@ -47,13 +47,7 @@ const NewEntryPage: VoidComponent = () => {
   const [CreateTimeEntryAction, CreateTimeEntry] = createServerAction$(createTimeEntryFn);
 
   return (
-    <Page
-      title="New Entry"
-      dropDownLinks={[
-        { text: "All Entrys", href: "/entrys" },
-        { text: "New Entry", href: "/entrys/new" },
-      ]}
-    >
+    <Page title="New Entry">
       <CreateTimeEntry.Form>
         <InputComponent
           name="name"

@@ -1,4 +1,5 @@
 import type { VoidComponent } from "solid-js";
+import { Page } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -10,7 +11,7 @@ import type { VoidComponent } from "solid-js";
   ============================================ */
 
 const UsersPage: VoidComponent = () => {
-  return <div>users page</div>;
+  return <Page title="Users">users page</Page>;
 };
 
 export default UsersPage;
