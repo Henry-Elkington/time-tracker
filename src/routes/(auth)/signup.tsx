@@ -5,16 +5,17 @@ import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
 
 import { db } from "~/backend";
-import { createSession, getLackOfSession } from "~/backend/session";
+import { createSession, getSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
 import { InputComponent, Button, Card, ErrorLabel, Input } from "~/frontend/components";
+import { User } from "@prisma/client";
 
 /* Data Fetching
   ============================================ */
 
 export const routeData = () => {
   return createServerData$(async (_, { request }) => {
-    const userid = await getLackOfSession(request);
+    const userid = await getSession(request, true);
     return userid;
   });
 };
@@ -29,13 +30,12 @@ async function signupFn(formData: FormData) {
     formData,
     z.object({
       email: z.string().email(),
-      firstName: z.string(),
-      lastName: z.string(),
+      name: z.string(),
       password: z.string(),
     })
   );
+
   const user = await db.user.findUnique({ where: { email: data.email } });
-  // const fields = Object.fromEntries(formData);
   if (user) {
     throw new FormError(`User with email ${data.email} already exists`); //, {fields,});
   }
@@ -43,9 +43,8 @@ async function signupFn(formData: FormData) {
   const newUser = await db.user.create({
     data: {
       email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      password: data.password,
+      name: data.name,
+      Password: { create: { password: data.password } },
     },
   });
 
@@ -62,62 +61,52 @@ const Signup: VoidComponent = () => {
   const [SignupAction, Signup] = createServerAction$(signupFn);
 
   return (
-    <main class="flex h-screen flex-col items-center justify-center">
-      <Card class="flex w-96 flex-col gap-4 p-5">
-        <Signup.Form class="flex flex-col gap-3">
-          <h1 class="text-center font-semibold">Login</h1>
-          <InputComponent
-            name="email"
-            type="email"
-            errorMessage={SignupAction.error?.fieldErrors?.email}
-            invalid={false}
-            lableText="Email:"
-            class="w-full"
-          />
-          <InputComponent
-            name="firstName"
-            type="text"
-            errorMessage={SignupAction.error?.fieldErrors?.email}
-            invalid={false}
-            lableText="First Name:"
-            class="w-full"
-          />
-          <InputComponent
-            name="lastName"
-            type="text"
-            errorMessage={SignupAction.error?.fieldErrors?.email}
-            invalid={false}
-            lableText="Last Name:"
-            class="w-full"
-          />
-          <InputComponent
-            name="password"
-            type="password"
-            errorMessage={SignupAction.error?.fieldErrors?.password}
-            invalid={false}
-            lableText="Password:"
-            class="w-full"
-          />
-          <div class="flex flex-col pt-3">
-            <Button disabled={SignupAction.pending} loading={SignupAction.pending}>
-              Signup
-            </Button>
-            <ErrorLabel>{SignupAction.error?.message}</ErrorLabel>
-          </div>
-        </Signup.Form>
-        <div class="flex items-center justify-between">
-          <label class="flex w-fit text-sm">
-            <Input invalid={false} type="checkbox" class="h-5 w-5 scale-75" />
-            Remember Me
-          </label>
-          <p class="text-right text-xs text-neutral-400">
-            Already Have An Account?{" "}
-            <A href="/login" class="text-blue-700 hover:underline">
-              Login
-            </A>
-          </p>
+    <main class="flex flex-col gap-4 p-5">
+      <Signup.Form class="flex flex-col gap-3">
+        <h1 class="text-center font-semibold">Signup</h1>
+        <InputComponent
+          name="email"
+          type="email"
+          errorMessage={SignupAction.error?.fieldErrors?.email}
+          invalid={false}
+          lableText="Email:"
+          class="w-full"
+        />
+        <InputComponent
+          name="name"
+          type="text"
+          errorMessage={SignupAction.error?.fieldErrors?.name}
+          invalid={false}
+          lableText="Name:"
+          class="w-full"
+        />
+        <InputComponent
+          name="password"
+          type="password"
+          errorMessage={SignupAction.error?.fieldErrors?.password}
+          invalid={false}
+          lableText="Password:"
+          class="w-full"
+        />
+        <div class="flex flex-col pt-3">
+          <Button disabled={SignupAction.pending} loading={SignupAction.pending}>
+            Signup
+          </Button>
+          <ErrorLabel>{SignupAction.error?.message}</ErrorLabel>
         </div>
-      </Card>
+      </Signup.Form>
+      <div class="flex items-center justify-between">
+        <label class="flex w-fit text-xs">
+          <Input invalid={false} type="checkbox" class="h-5 w-5 scale-75" />
+          Remember Me
+        </label>
+        <p class="text-right text-xs text-neutral-400">
+          Already Have An Account?{" "}
+          <A href="/login" class="text-blue-700 hover:underline">
+            Login
+          </A>
+        </p>
+      </div>
     </main>
   );
 };

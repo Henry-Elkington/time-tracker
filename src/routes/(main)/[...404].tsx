@@ -12,7 +12,7 @@ import { Page } from "~/frontend/components";
   ============================================ */
 
 const NotFoundPage: VoidComponent = () => {
-  return <Page title="404: Page Not Found"></Page>;
+  return <Page title="404: Page Not Found">a</Page>;
 };
 
 export default NotFoundPage;

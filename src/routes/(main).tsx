@@ -1,12 +1,18 @@
 import { A, Outlet, useRouteData } from "solid-start";
-import { type ServerFunctionEvent, createServerAction$ } from "solid-start/server";
+import { type ServerFunctionEvent, createServerAction$, createServerData$ } from "solid-start/server";
 import type { Component, JSX } from "solid-js";
 import { type VoidComponent } from "solid-js";
-
-import { deleteSession } from "~/backend/session";
+import { getSession } from "~/backend/session";
 
 /* Data Fetching
   ============================================ */
+
+export const routeData = () => {
+  return createServerData$(async (_, { request }) => {
+    const userid = await getSession(request);
+    return userid;
+  });
+};
 
 /* Actions
   ============================================ */
@@ -37,6 +43,9 @@ const NavLink: Component<{ name: string; href: string; end: boolean }> = (props)
 };
 
 const MainLayout: VoidComponent = () => {
+  const userId = useRouteData<typeof routeData>();
+  const use = userId();
+
   return (
     <div class="static">
       <main class="container m-auto">
@@ -45,11 +54,10 @@ const MainLayout: VoidComponent = () => {
       <NavBar
         center={
           <>
+            <NavLink end={false} href="/profile" name="Profile" />
             <NavLink end={true} href="/" name="Home" />
             <NavLink end={false} href="/entrys" name="Entrys" />
             <NavLink end={false} href="/projects" name="Projects" />
-            <NavLink end={false} href="/users" name="Users" />
-            <NavLink end={false} href="/profile" name="Profile" />
           </>
         }
       />

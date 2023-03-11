@@ -12,35 +12,23 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    email     String @unique
-    firstName String
-    lastName  String
+    email String @unique
+    name  String
 
-    password String
-
-    TimeEntrys TimeEntry[]
-
-    ProjectsEmployer Project[] @relation("employer")
-    ProjectsEmployee Project[] @relation("employee")
-    Project          Project[]
+    Password      Password?
+    ProjectsAdmin Project[]
+    Employees     Employee[]
 }
 
-model TimeEntry {
+model Password {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name        String
-    discription String
+    User   User   @relation(fields: [userId], references: [id])
+    userId String @unique
 
-    startTime DateTime
-    endTime   DateTime
-
-    User   User?   @relation(fields: [userId], references: [id])
-    userId String?
-
-    Project   Project? @relation(fields: [projectId], references: [id])
-    projectId String?
+    password String
 }
 
 model Project {
@@ -48,14 +36,40 @@ model Project {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name        String
-    discription String
+    Admin   User   @relation(fields: [adminId], references: [id])
+    adminId String @unique
 
-    Admin   User?   @relation(fields: [adminId], references: [id])
-    adminId String?
+    name String
 
-    Employers User[] @relation("employer")
-    Employees User[] @relation("employee")
+    Employee Employee[]
+}
 
-    TimeEntry TimeEntry[]
+model Employee {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    User      User    @relation(fields: [userId], references: [id])
+    userId    String  @unique
+    Project   Project @relation(fields: [projectId], references: [id])
+    projectId String  @unique
+
+    currentCostPerHour Int
+
+    TimeEntrys TimeEntry[]
+}
+
+model TimeEntry {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Employee   Employee @relation(fields: [employeeId], references: [id])
+    employeeId String
+
+    discription  String
+    startTime    DateTime
+    endTime      DateTime
+    constPerHour Int
+    paid         Boolean
 }

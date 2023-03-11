@@ -13,7 +13,6 @@ const storage = createCookieSessionStorage({
   },
 });
 
-// redirectTo: string
 export async function createSession(userId: string) {
   const session = await storage.getSession();
   session.set("userId", userId);
@@ -27,28 +26,22 @@ export async function createSession(userId: string) {
 
 // redirectTo: string = new URL(request.url).pathname
 // const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
-export async function getSession(request: Request) {
+export async function getSession(request: Request, redirectIfExists?: boolean) {
   const cookie = request.headers.get("Cookie") ?? "";
   const session = await storage.getSession(cookie);
   const userId = session.get("userId");
 
-  if (!userId || typeof userId !== "string") {
-    throw redirect("/login");
+  if (!redirectIfExists) {
+    if (!userId || typeof userId !== "string") {
+      throw redirect("/login");
+    }
+  } else {
+    if (userId && typeof userId === "string") {
+      throw redirect("/");
+    }
   }
 
   return userId;
-}
-
-export async function getLackOfSession(request: Request) {
-  const cookie = request.headers.get("Cookie") ?? "";
-  const session = await storage.getSession(cookie);
-  const userId = session.get("userId");
-
-  if (userId && typeof userId === "string") {
-    throw redirect("/");
-  }
-
-  return;
 }
 
 export async function deleteSession(request: Request) {
