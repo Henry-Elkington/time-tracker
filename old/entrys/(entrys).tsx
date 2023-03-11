@@ -19,8 +19,6 @@ export const routeData = (RouteDataArgs: RouteDataArgs) => {
     const entrys = await db.timeEntry.findMany({ where: { userId: userId } });
     return entrys.map((entry) => ({
       id: entry.id,
-      name: entry.name,
-      discription: entry.discription,
       lenth: entry.endTime.getTime() - entry.startTime.getTime(),
     }));
   });

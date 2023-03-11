@@ -105,7 +105,7 @@ export const InputComponent: Component<
   ============================================ */
 
 export const Page: ParentComponent<{
-  title: string;
+  title: string | undefined;
   right?: JSX.Element;
 }> = (props) => {
   return (

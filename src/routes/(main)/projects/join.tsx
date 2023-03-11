@@ -1,4 +1,6 @@
 import type { VoidComponent } from "solid-js";
+import { A } from "solid-start";
+import { Page, buttonStyles } from "~/frontend/components";
 
 /* Data Fetching
   ============================================ */
@@ -9,8 +11,8 @@ import type { VoidComponent } from "solid-js";
 /* Frontend
   ============================================ */
 
-const SearchProjectsPage: VoidComponent = () => {
-  return <div>search projects page</div>;
+const JoinProjectPage: VoidComponent = () => {
+  return <Page title="Join Project">a</Page>;
 };
 
-export default SearchProjectsPage;
+export default JoinProjectPage;

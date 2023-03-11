@@ -26,7 +26,7 @@ export async function createSession(userId: string) {
 
 // redirectTo: string = new URL(request.url).pathname
 // const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
-export async function getSession(request: Request, redirectIfExists?: boolean) {
+export async function getSession(request: Request, redirectIfExists?: boolean): Promise<string> {
   const cookie = request.headers.get("Cookie") ?? "";
   const session = await storage.getSession(cookie);
   const userId = session.get("userId");

@@ -13,7 +13,7 @@ import { validateFields } from "~/backend/utils";
   ============================================ */
 
 async function createTimeEntryFn(formData: FormData, { request }: { request: Request }) {
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 1000));
 
   const userId = await getSession(request);
 

@@ -16,9 +16,14 @@ const UsersPage: VoidComponent = () => {
     <Page
       title="Projects"
       right={
-        <A href="/projects/new" class={buttonStyles}>
-          New
-        </A>
+        <div class="flex gap-4">
+          <A href="/projects/join" class={buttonStyles}>
+            Join
+          </A>
+          <A href="/projects/new" class={buttonStyles}>
+            New
+          </A>
+        </div>
       }
     >
       projects page

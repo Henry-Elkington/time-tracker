@@ -1,5 +1,5 @@
 import { For, VoidComponent } from "solid-js";
-import { useRouteData } from "solid-start";
+import { A, useRouteData } from "solid-start";
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
 import { z } from "zod";
 import { db } from "~/backend";
@@ -10,45 +10,35 @@ import { Button, ErrorLabel, InputComponent, Label, Page, buttonStyles } from "~
 /* Data Fetching
   ============================================ */
 
-export const routeData = () => {
-  const users = createServerData$(async () => {
-    return await db.user.findMany({ select: { firstName: true, lastName: true, id: true } });
-  });
-
-  return { users: users };
-};
-
 /* Actions
   ============================================ */
 
 async function createProjectFn(formData: FormData, { request }: { request: Request }) {
+  await new Promise((res) => setTimeout(res, 2000));
+
   const userId = await getSession(request);
 
   const data = await validateFields(
     formData,
     z.object({
       name: z.string(),
-      discription: z.string(),
     })
   );
 
   const newProject = await db.project.create({
     data: {
       name: data.name,
-      discription: data.discription,
       adminId: userId,
     },
   });
 
-  return redirect("/project/id/" + newProject.id);
+  return redirect("/projects/id/" + newProject.id);
 }
 
 /* Frontend
   ============================================ */
 
 const NewProjectPage: VoidComponent = () => {
-  const { users } = useRouteData<typeof routeData>();
-
   const [CreateProjectAction, CreateProject] = createServerAction$(createProjectFn);
 
   return (
@@ -62,15 +52,7 @@ const NewProjectPage: VoidComponent = () => {
           lableText="Name:"
           class="w-full"
         />
-        <InputComponent
-          name="discription"
-          type="text"
-          errorMessage={CreateProjectAction.error?.fieldErrors?.discription}
-          invalid={CreateProjectAction.error?.fieldErrors?.discription}
-          lableText="discription:"
-          class="w-full"
-        />
-        <div class="flex flex-col pt-2">
+        <div class="flex flex-col pt-4">
           <Button disabled={CreateProjectAction.pending} loading={CreateProjectAction.pending}>
             Create
           </Button>
