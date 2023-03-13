@@ -22,14 +22,12 @@ async function createProjectFn(formData: FormData, { request }: { request: Reque
     formData,
     z.object({
       name: z.string(),
-      defaultRate: z.coerce.number(),
     })
   );
 
   const newProject = await db.project.create({
     data: {
       name: data.name,
-      defaultRate: data.defaultRate,
       adminId: userId,
     },
   });
@@ -52,14 +50,6 @@ const NewProjectPage: VoidComponent = () => {
           errorMessage={CreateProjectAction.error?.fieldErrors?.name}
           invalid={CreateProjectAction.error?.fieldErrors?.name}
           lableText="Name:"
-          class="w-full"
-        />
-        <InputComponent
-          name="defaultRate"
-          type="number"
-          errorMessage={CreateProjectAction.error?.fieldErrors?.defaultRate}
-          invalid={CreateProjectAction.error?.fieldErrors?.defaultRate}
-          lableText="Default Rate:"
           class="w-full"
         />
         <div class="flex flex-col pt-4">
