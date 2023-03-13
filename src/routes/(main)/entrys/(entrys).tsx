@@ -1,3 +1,4 @@
+import { TimeEntry } from "@prisma/client";
 import { Suspense, VoidComponent } from "solid-js";
 import { For } from "solid-js";
 import type { RouteDataArgs } from "solid-start";
@@ -16,9 +17,13 @@ export const routeData = (RouteDataArgs: RouteDataArgs) => {
     await new Promise((res) => setTimeout(res, 1000));
 
     const userId = await getSession(request);
-    const entrys = await db.timeEntry.findMany({ where: { userId: userId } });
+    const entrys = await db.timeEntry.findMany({ where: { Employee: { userId: userId } } });
+
     return entrys.map((entry) => ({
       id: entry.id,
+      discription: entry.discription,
+      rate: entry.rate,
+      paid: entry.paid,
       lenth: entry.endTime.getTime() - entry.startTime.getTime(),
     }));
   });
@@ -50,11 +55,10 @@ const entrysPage: VoidComponent = () => {
             {(timeEntry) => (
               <A href={"/entrys/id/" + timeEntry.id}>
                 <Card>
-                  <p class="border-b border-gray-300 p-2 text-xl">{timeEntry.name}</p>
-                  <p class="p-2">{timeEntry.discription}</p>
                   <p class="p-2 pt-0">
                     {Math.floor(timeEntry.lenth / 1000 / 60 / 60)}h - {Math.floor(timeEntry.lenth / 1000 / 60)}m
                   </p>
+                  <p class="p-2">{timeEntry.discription}</p>
                 </Card>
               </A>
             )}

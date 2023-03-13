@@ -20,7 +20,7 @@ async function createTimeEntryFn(formData: FormData, { request }: { request: Req
   const data = await validateFields(
     formData,
     z.object({
-      name: z.string(),
+      projectId: z.string(),
       discription: z.string(),
       startTimeLocal: z.coerce.date(),
       endTimeLocal: z.coerce.date(),
@@ -50,11 +50,11 @@ const NewEntryPage: VoidComponent = () => {
     <Page title="New Entry">
       <CreateTimeEntry.Form>
         <InputComponent
-          name="name"
+          name="projectId"
           type="text"
           errorMessage={CreateTimeEntryAction.error?.fieldErrors?.name}
           invalid={CreateTimeEntryAction.error?.fieldErrors?.name}
-          lableText="Name:"
+          lableText="Project Id:"
           class="w-full"
         />
         <InputComponent

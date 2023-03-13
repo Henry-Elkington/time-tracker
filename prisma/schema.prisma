@@ -37,7 +37,7 @@ model Project {
     updatedAt DateTime @updatedAt
 
     Admin   User   @relation(fields: [adminId], references: [id])
-    adminId String @unique
+    adminId String
 
     name String
 
@@ -50,11 +50,11 @@ model Employee {
     updatedAt DateTime @updatedAt
 
     User      User    @relation(fields: [userId], references: [id])
-    userId    String  @unique
+    userId    String
     Project   Project @relation(fields: [projectId], references: [id])
-    projectId String  @unique
+    projectId String
 
-    currentCostPerHour Int
+    defaultRate Int // cost per hour
 
     TimeEntrys TimeEntry[]
 }
@@ -67,9 +67,9 @@ model TimeEntry {
     Employee   Employee @relation(fields: [employeeId], references: [id])
     employeeId String
 
-    discription  String
-    startTime    DateTime
-    endTime      DateTime
-    constPerHour Int
-    paid         Boolean
+    discription String
+    startTime   DateTime
+    endTime     DateTime
+    rate        Int // cost per hour
+    paid        Boolean
 }

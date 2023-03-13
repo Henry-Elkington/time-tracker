@@ -1,5 +1,5 @@
 import { type ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { type VoidComponent } from "solid-js";
+import { Suspense, type VoidComponent } from "solid-js";
 import { Button, ErrorLabel, Input, InputComponent, Page } from "~/frontend/components";
 
 import { deleteSession, getSession } from "~/backend/session";
@@ -89,51 +89,53 @@ const ProfilePage: VoidComponent = () => {
         </Logout.Form>
       }
     >
-      <UpdateProfile.Form class="flex flex-col gap-2">
-        <InputComponent
-          value={user()?.email}
-          type="text"
-          name="email"
-          errorMessage=""
-          invalid={false}
-          lableText="Email:"
-          class="w-full"
-        />
-        <InputComponent
-          value={user()?.name}
-          type="text"
-          name="name"
-          errorMessage=""
-          invalid={false}
-          lableText="Name:"
-          class="w-full"
-        />
-        <InputComponent
-          value=""
-          type="password"
-          name="password"
-          errorMessage=""
-          invalid={false}
-          lableText="Password:"
-          class="w-full"
-        />
-        <InputComponent
-          value=""
-          type="password"
-          name="confirmPassword"
-          errorMessage=""
-          invalid={false}
-          lableText="Confirm Password:"
-          class="w-full"
-        />
-        <div class="flex flex-col pt-4">
-          <Button disabled={UpdateProfileAction.pending} loading={UpdateProfileAction.pending}>
-            Update
-          </Button>
-          <ErrorLabel>{UpdateProfileAction.error?.message}</ErrorLabel>
-        </div>
-      </UpdateProfile.Form>
-      <p class="p-5 text-center">{user()?.id}</p>
+      <Suspense fallback="Loading...">
+        <UpdateProfile.Form class="flex flex-col gap-2">
+          <InputComponent
+            value={user()?.email}
+            type="text"
+            name="email"
+            errorMessage=""
+            invalid={false}
+            lableText="Email:"
+            class="w-full"
+          />
+          <InputComponent
+            value={user()?.name}
+            type="text"
+            name="name"
+            errorMessage=""
+            invalid={false}
+            lableText="Name:"
+            class="w-full"
+          />
+          <InputComponent
+            value=""
+            type="password"
+            name="password"
+            errorMessage=""
+            invalid={false}
+            lableText="Password:"
+            class="w-full"
+          />
+          <InputComponent
+            value=""
+            type="password"
+            name="confirmPassword"
+            errorMessage=""
+            invalid={false}
+            lableText="Confirm Password:"
+            class="w-full"
+          />
+          <div class="flex flex-col pt-4">
+            <Button disabled={UpdateProfileAction.pending} loading={UpdateProfileAction.pending}>
+              Update
+            </Button>
+            <ErrorLabel>{UpdateProfileAction.error?.message}</ErrorLabel>
+          </div>
+        </UpdateProfile.Form>
+        <p class="p-5 text-center">{user()?.id}</p>
+      </Suspense>
     </Page>
   );
 };
