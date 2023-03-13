@@ -126,7 +126,7 @@ const EditEmployeesPage: VoidComponent = () => {
               errorMessage={CreateEmployeeAction.error?.fieldErrors?.email}
               invalid={CreateEmployeeAction.error?.fieldErrors?.email}
               lableText="Email:"
-              value={project()?.name}
+              value=""
               class="w-full"
             />
             <div class="flex flex-col pt-4">
