@@ -4,7 +4,7 @@ import { ErrorBoundary, useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
-import { Card, Page } from "~/frontend/components";
+import { Card, Page } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */

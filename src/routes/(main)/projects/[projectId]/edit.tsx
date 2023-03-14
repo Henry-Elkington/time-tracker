@@ -5,7 +5,8 @@ import { z } from "zod";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { Button, Card, ErrorLabel, InputComponent, Page, buttonStyles } from "~/frontend/components";
+import { Button, ErrorLabel, InputComponent, buttonStyles } from "~/frontend/inputComponents";
+import { Page } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */

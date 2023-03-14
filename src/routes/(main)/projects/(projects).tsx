@@ -1,11 +1,12 @@
 import { Project } from "@prisma/client";
-import { For, Suspense, VoidComponent } from "solid-js";
+import { Component, For, JSX, Suspense, VoidComponent } from "solid-js";
 import { A, RouteDataArgs, useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { twMerge } from "tailwind-merge";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
-import { Card, Page, buttonStyles } from "~/frontend/components";
+import { buttonStyles } from "~/frontend/inputComponents";
+import { Page, cardStyles } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */
@@ -32,25 +33,60 @@ export const routeData = (RouteDataArgs: RouteDataArgs) => {
 /* Frontend
   ============================================ */
 
+const ProjectTable: Component<{ head: JSX.Element; body: JSX.Element }> = (props) => {
+  return (
+    <table class={twMerge(cardStyles, "w-full")}>
+      <thead>{props.head}</thead>
+      <tbody>{props.body}</tbody>
+    </table>
+  );
+};
+
+const ProjectTableHead: Component = () => {
+  return (
+    <tr>
+      <th scope="col" class="border-gray-300 p-2 text-left">
+        Name
+      </th>
+      <th scope="col" class="border-gray-300 p-2 text-left"></th>
+    </tr>
+  );
+};
+
+const ProjectTableRow: Component<{ name: string; id: string }> = (props) => {
+  //   <A href={"/projects/" + project.id} class={buttonStyles}>
+  //   Open
+  // </A>
+
+  return (
+    <tr>
+      <td class="border-y border-gray-300 p-2 text-left">{props.name}</td>
+      <td class="border-y border-gray-300 p-2 text-right">
+        <A href={props.id} class={buttonStyles}>
+          Open
+        </A>
+      </td>
+    </tr>
+  );
+};
+
 const UsersPage: VoidComponent = () => {
   const { projects } = useRouteData<typeof routeData>();
 
   return (
-    <Page title="Projects">
-      <A href="/projects/new">
-        <p class={twMerge(buttonStyles, "mb-4 w-full")}>New</p>
-      </A>
+    <Page
+      title="All Projects"
+      right={
+        <A href="/projects/new" class={buttonStyles}>
+          New
+        </A>
+      }
+    >
       <Suspense fallback="Loading...">
-        <For each={projects()}>
-          {(project) => (
-            <div class="flex items-center justify-between border-t border-neutral-300 py-2 last:border-y">
-              {project.name}
-              <A href={"/projects/" + project.id} class={buttonStyles}>
-                Open
-              </A>
-            </div>
-          )}
-        </For>
+        <ProjectTable
+          head={<ProjectTableHead />}
+          body={<For each={projects()}>{(project) => <ProjectTableRow {...project} />}</For>}
+        />
       </Suspense>
     </Page>
   );

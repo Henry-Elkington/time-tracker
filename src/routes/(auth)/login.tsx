@@ -5,7 +5,7 @@ import { useRouteData } from "solid-start";
 import { type VoidComponent } from "solid-js";
 
 import { createSession, getSession } from "~/backend/session";
-import { InputComponent, Card, ErrorLabel, Input, Button } from "~/frontend/components";
+import { InputComponent, ErrorLabel, Input, Button } from "~/frontend/inputComponents";
 import { validateFields } from "~/backend/utils";
 import { db } from "~/backend";
 

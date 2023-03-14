@@ -7,8 +7,7 @@ import { type VoidComponent } from "solid-js";
 import { db } from "~/backend";
 import { createSession, getSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { InputComponent, Button, Card, ErrorLabel, Input } from "~/frontend/components";
-import { User } from "@prisma/client";
+import { InputComponent, Button, ErrorLabel, Input } from "~/frontend/inputComponents";
 
 /* Data Fetching
   ============================================ */

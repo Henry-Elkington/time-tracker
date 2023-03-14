@@ -1,5 +1,6 @@
 import { createServerAction$, createServerData$, redirect } from "solid-start/server";
-import { Button, ErrorLabel, InputComponent, Page, buttonStyles } from "~/frontend/components";
+import { Button, ErrorLabel, InputComponent, buttonStyles } from "~/frontend/inputComponents";
+import { Card, Page } from "~/frontend/layoutComponents";
 import { For, type VoidComponent } from "solid-js";
 import { z } from "zod";
 import { db } from "~/backend";

@@ -1,6 +1,5 @@
 import type { VoidComponent } from "solid-js";
-import { Outlet } from "solid-start";
-import { Page } from "~/frontend/components";
+import { Page } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */
@@ -12,7 +11,7 @@ import { Page } from "~/frontend/components";
   ============================================ */
 
 const NotFoundPage: VoidComponent = () => {
-  return <Page title="404: Page Not Found">a</Page>;
+  return <Page title="404: Page Not Found"></Page>;
 };
 
 export default NotFoundPage;

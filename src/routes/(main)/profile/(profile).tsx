@@ -5,8 +5,9 @@ import { useRouteData } from "solid-start";
 
 import { db } from "~/backend";
 import { deleteSession, getSession } from "~/backend/session";
-import { Button, ErrorLabel, InputComponent, Page, buttonStyles } from "~/frontend/components";
-import { twJoin, twMerge } from "tailwind-merge";
+import { Button, buttonStyles } from "~/frontend/inputComponents";
+import { twMerge } from "tailwind-merge";
+import { Page } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */

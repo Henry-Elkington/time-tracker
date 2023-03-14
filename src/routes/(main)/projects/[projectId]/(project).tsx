@@ -1,12 +1,12 @@
 import type { VoidComponent } from "solid-js";
 import { For, Suspense } from "solid-js";
-import { Outlet, RouteDataArgs } from "solid-start";
+import { RouteDataArgs } from "solid-start";
 import { A, useRouteData } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
-import { twMerge } from "tailwind-merge";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
-import { Card, Page, buttonStyles } from "~/frontend/components";
+import { buttonStyles } from "~/frontend/inputComponents";
+import { Page, Card } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */
@@ -49,7 +49,7 @@ const ProjectPage: VoidComponent = () => {
 
   return (
     <Page
-      title={<Suspense fallback="Loading...">{project()?.name}</Suspense>}
+      title="Project"
       right={
         <div class="flex gap-4">
           <A href="edit" class={buttonStyles}>

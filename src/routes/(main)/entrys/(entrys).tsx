@@ -8,7 +8,8 @@ import { createServerData$ } from "solid-start/server";
 import { twMerge } from "tailwind-merge";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
-import { Button, Card, Page, buttonStyles } from "~/frontend/components";
+import { buttonStyles } from "~/frontend/inputComponents";
+import { Card, Page } from "~/frontend/layoutComponents";
 
 /* Data Fetching
   ============================================ */
