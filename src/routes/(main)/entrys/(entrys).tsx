@@ -50,7 +50,7 @@ const entrysPage: VoidComponent = () => {
         <Suspense fallback="Loading...">
           <For each={timeEntrys()}>
             {(timeEntry) => (
-              <A href={"/entrys/id/" + timeEntry.id}>
+              <A href={"/entrys/" + timeEntry.id}>
                 <Card>
                   <p class="p-2 pb-0">
                     {Math.floor(timeEntry.lenth / 1000 / 60 / 60)}h - {Math.floor(timeEntry.lenth / 1000 / 60)}m
