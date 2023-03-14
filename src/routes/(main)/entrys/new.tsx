@@ -5,7 +5,7 @@ import { z } from "zod";
 import { db } from "~/backend";
 import { getSession } from "~/backend/session";
 import { validateFields } from "~/backend/utils";
-import { FormError, useRouteData } from "solid-start";
+import { FormError, RouteDataArgs, useRouteData } from "solid-start";
 
 /* Data Fetching
   ============================================ */
