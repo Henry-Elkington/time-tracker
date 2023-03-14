@@ -14,7 +14,7 @@ import { Card, Page, buttonStyles } from "~/frontend/components";
 export function routeData({ params }: RouteDataArgs) {
   return createServerData$(
     async ([projectId], { request }) => {
-      await new Promise((res) => setTimeout(res, 1000));
+      await new Promise((res) => setTimeout(res, 500));
 
       // validate that the user is the admin
       const userId = await getSession(request);
@@ -52,11 +52,12 @@ const ProjectPage: VoidComponent = () => {
       title={<Suspense fallback="Loading...">{project()?.name}</Suspense>}
       right={
         <div class="flex gap-4">
-          <A href="settings" class={buttonStyles}>
-            Edit Settings
+          <A href="edit" class={buttonStyles}>
+            Edit
           </A>
         </div>
       }
+      backbutton
     >
       <Suspense fallback="Loading...">
         <div class="flex flex-col gap-4">
@@ -70,9 +71,6 @@ const ProjectPage: VoidComponent = () => {
           <Card>
             <div class="flex justify-between border-b border-neutral-300 bg-neutral-100 p-2">
               <p>Project Employees</p>
-              <A href="employees" class={twMerge(buttonStyles, "bg-white")}>
-                Edit Employees
-              </A>
             </div>
             <div class="divide-y divide-neutral-300 p-2">
               <For each={project()?.Employee}>

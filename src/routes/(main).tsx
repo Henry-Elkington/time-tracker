@@ -55,7 +55,6 @@ const MainLayout: VoidComponent = () => {
         center={
           <>
             <NavLink end={false} href="/profile" name="Profile" />
-            <NavLink end={true} href="/" name="Home" />
             <NavLink end={false} href="/entrys" name="Entrys" />
             <NavLink end={false} href="/projects" name="Projects" />
           </>

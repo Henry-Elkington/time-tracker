@@ -71,5 +71,5 @@ model TimeEntry {
     startTime   DateTime
     endTime     DateTime
     rate        Int // cost per hour
-    paid        Boolean
+    paid        Boolean  @default(false)
 }

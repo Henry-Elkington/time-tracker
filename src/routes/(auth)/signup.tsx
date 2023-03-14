@@ -24,14 +24,14 @@ export const routeData = () => {
   ============================================ */
 
 async function signupFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 500));
 
   const data = await validateFields(
     formData,
     z.object({
       email: z.string().email(),
-      name: z.string(),
-      password: z.string(),
+      name: z.string().min(3),
+      password: z.string().min(5),
     })
   );
 

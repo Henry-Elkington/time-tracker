@@ -107,11 +107,21 @@ export const InputComponent: Component<
 export const Page: ParentComponent<{
   title: string | undefined | JSX.Element;
   right?: JSX.Element;
+  backbutton?: boolean;
 }> = (props) => {
   return (
     <>
       <nav class="mx-4 flex items-center justify-between border-b border-neutral-300 bg-white py-3">
-        <h1 class="text-3xl">{props.title}</h1>
+        <h1 class="text-3xl">
+          {props.backbutton ? (
+            <A href="../" class="mr-2">
+              &lt;{" "}
+            </A>
+          ) : (
+            ""
+          )}
+          {props.title}
+        </h1>
         {props.right}
       </nav>
       <div class="p-3 px-4 pb-[calc(4.5rem_+_1rem)]">{props.children}</div>

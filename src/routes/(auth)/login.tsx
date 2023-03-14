@@ -23,13 +23,13 @@ export const routeData = () => {
   ============================================ */
 
 async function loginFn(formData: FormData) {
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 500));
 
   const data = await validateFields(
     formData,
     z.object({
       email: z.string().email(),
-      password: z.string(),
+      password: z.string().min(5),
     })
   );
 

@@ -14,7 +14,7 @@ import { Button, ErrorLabel, InputComponent, Label, Page, buttonStyles } from "~
   ============================================ */
 
 async function createProjectFn(formData: FormData, { request }: { request: Request }) {
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 500));
 
   const userId = await getSession(request);
 
@@ -32,7 +32,7 @@ async function createProjectFn(formData: FormData, { request }: { request: Reque
     },
   });
 
-  return redirect("/projects/id/" + newProject.id);
+  return redirect("/projects/" + newProject.id);
 }
 
 /* Frontend
@@ -42,7 +42,7 @@ const NewProjectPage: VoidComponent = () => {
   const [CreateProjectAction, CreateProject] = createServerAction$(createProjectFn);
 
   return (
-    <Page title="New Project">
+    <Page title="New Project" backbutton>
       <CreateProject.Form>
         <InputComponent
           name="name"
